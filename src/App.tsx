@@ -1,25 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+
+import TrackCreateModal from './components/TrackCreateModal/TrackCreateModal';
+import TrackList from './components/TrackList/TrackList';
+import TrackEditModal from './components/TrackEditModal/TrackEditModal';
+import { Track } from './features/tracks/types';
+import { ToastContainer } from 'react-toastify';
+import Header from './components/Header/Header';
 
 function App() {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [editingTrack, setEditingTrack] = useState<Track | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header
+        onCreate={() => setModalOpen(true)}
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
+      <main className="content">
+        <TrackList onEditTrack={(track) => setEditingTrack(track)} searchQuery={searchQuery} />
+      </main>
+
+      {isModalOpen && <TrackCreateModal onClose={() => setModalOpen(false)} />}
+      {editingTrack && (
+        <TrackEditModal track={editingTrack} onClose={() => setEditingTrack(null)} />
+      )}
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
   );
 }
 

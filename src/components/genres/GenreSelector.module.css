@@ -1,0 +1,44 @@
+.genreSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.selectedGenres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  background-color: #2a2a2a;
+  color: white;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}
+
+.removeButton {
+  margin-left: 0.5rem;
+  color: #f33;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  color: #faa;
+}
+
+.select {
+  background-color: #1e1e1e;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  padding: 0.4rem 1.75rem 0.4rem 0.6rem;
+}

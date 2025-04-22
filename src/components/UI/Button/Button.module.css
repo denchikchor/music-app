@@ -1,0 +1,74 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* === Variants === */
+.primary {
+  background-color: #f33;
+  color: white;
+}
+
+.primary:hover {
+  background-color: rgb(255, 255, 255);
+}
+
+.danger {
+  background-color: rgb(66, 0, 0);
+  color: white;
+}
+
+.danger:hover {
+  background-color: #7d0000;
+  color: white;
+}
+
+.outline {
+  background-color: transparent;
+  color: white;
+  border: 1px solid #555;
+}
+
+.outline:hover {
+  background-color: #333;
+  border-color: #777;
+  color: #fff;
+}
+
+/* === Sizes === */
+.sm {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+}
+
+.md {
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+}
+
+.lg {
+  font-size: 1.05rem;
+  padding: 0.6rem 1.25rem;
+}
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  width: 1em;
+  height: 1em;
+}

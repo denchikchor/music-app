@@ -1,0 +1,17 @@
+ul {
+  padding: 0;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+}
+.paginationWrapper {
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+.controls {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 2rem;
+}
