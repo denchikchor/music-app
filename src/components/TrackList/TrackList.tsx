@@ -140,7 +140,7 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
       </ul>
 
       <div className={styles.paginationWrapper}>
-        <Pagination
+        <Pagination 
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={(page) => setCurrentPage(page)}
