@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import type { RootState, AppDispatch } from '../../store';
+import type { RootState } from '../../store';
 import { fetchGenres } from '../../features/genres/genresSlice';
 import styles from './GenreSelector.module.css';
+import { useAppDispatch } from '../../hooks/redux-hook';
 
 interface Props {
   selected: string[];
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const GenreSelector: React.FC<Props> = ({ selected, onChange }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const genres = useSelector((state: RootState) => state.genres.items);
 
   useEffect(() => {

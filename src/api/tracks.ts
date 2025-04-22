@@ -1,7 +1,6 @@
 import axios from 'axios';
 import type { Track } from '../features/tracks/types';
-
-export const API_BASE = 'http://localhost:8000/api';
+import { API_BASE } from './config';
 
 // Options for creating a new track
 export interface CreateTrackPayload {
@@ -19,9 +18,7 @@ export interface EditTrackPayload extends CreateTrackPayload {
 
 // Get track list
 export const getTracks = (limit = 1000): Promise<Track[]> =>
-  axios
-    .get<{ data: Track[] }>(`${API_BASE}/tracks?limit=${limit}`)
-    .then((res) => res.data.data);
+  axios.get<{ data: Track[] }>(`${API_BASE}/tracks?limit=${limit}`).then((res) => res.data.data);
 
 // Create a new track
 export const createTrack = (payload: CreateTrackPayload): Promise<void> =>
@@ -29,9 +26,7 @@ export const createTrack = (payload: CreateTrackPayload): Promise<void> =>
 
 // Edit an existing track
 export const editTrack = (payload: EditTrackPayload): Promise<Track> =>
-  axios
-    .put<Track>(`${API_BASE}/tracks/${payload.id}`, payload)
-    .then((res) => res.data);
+  axios.put<Track>(`${API_BASE}/tracks/${payload.id}`, payload).then((res) => res.data);
 
 // Delete track by ID
 export const deleteTrack = (id: string): Promise<void> =>

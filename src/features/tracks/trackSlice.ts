@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { Track } from './types';
 import type { AppDispatch } from '../../store';
-import type { CreateTrackPayload, EditTrackPayload } from '../../api/api';
+import type { CreateTrackPayload, EditTrackPayload } from '../../api/tracks';
 import {
   getTracks,
   createTrack as apiCreateTrack,
@@ -9,7 +9,7 @@ import {
   deleteTrack as apiDeleteTrack,
   uploadTrackFile as apiUploadTrackFile,
   removeTrackFile as apiRemoveTrackFile,
-} from '../../api/api';
+} from '../../api/tracks';
 
 interface TracksState {
   items: Track[];
@@ -24,20 +24,13 @@ const initialState: TracksState = {
 };
 
 // Loading track list
-export const fetchTracks = createAsyncThunk<Track[], void>(
-  'tracks/fetchTracks',
-  async () => {
-    const tracks = await getTracks();
-    return tracks;
-  }
-);
+export const fetchTracks = createAsyncThunk<Track[], void>('tracks/fetchTracks', async () => {
+  const tracks = await getTracks();
+  return tracks;
+});
 
 // Creating a new track
-export const createTrack = createAsyncThunk<
-  void,
-  CreateTrackPayload,
-  { dispatch: AppDispatch }
->(
+export const createTrack = createAsyncThunk<void, CreateTrackPayload, { dispatch: AppDispatch }>(
   'tracks/createTrack',
   async (payload, { dispatch }) => {
     await apiCreateTrack(payload);
@@ -47,10 +40,7 @@ export const createTrack = createAsyncThunk<
 );
 
 // Editing a track
-export const editTrack = createAsyncThunk<
-  Track,
-  EditTrackPayload
->(
+export const editTrack = createAsyncThunk<Track, EditTrackPayload>(
   'tracks/editTrack',
   async (payload) => {
     const updated = await apiEditTrack(payload);
@@ -59,19 +49,13 @@ export const editTrack = createAsyncThunk<
 );
 
 // Deleting a single track
-export const deleteTrack = createAsyncThunk<string, string>(
-  'tracks/deleteTrack',
-  async (id) => {
-    await apiDeleteTrack(id);
-    return id;
-  }
-);
+export const deleteTrack = createAsyncThunk<string, string>('tracks/deleteTrack', async (id) => {
+  await apiDeleteTrack(id);
+  return id;
+});
 
 // Uploading an audio file for a track
-export const uploadTrackFile = createAsyncThunk<
-  Track,
-  { id: string; file: FormData }
->(
+export const uploadTrackFile = createAsyncThunk<Track, { id: string; file: FormData }>(
   'tracks/uploadTrackFile',
   async ({ id, file }) => {
     const updated = await apiUploadTrackFile(id, file);

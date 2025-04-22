@@ -20,6 +20,7 @@ const CustomAudioPlayer: React.FC<Props> = ({ src, onEndedNext, isActive, onTogg
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const connectAudio = () => {
     if (!audioRef.current || isConnected) return;
@@ -95,7 +96,7 @@ const CustomAudioPlayer: React.FC<Props> = ({ src, onEndedNext, isActive, onTogg
 
     if (isActive) {
       if (!isConnected) {
-        connectAudio(); 
+        connectAudio();
       } else {
         drawWave();
       }
@@ -104,6 +105,7 @@ const CustomAudioPlayer: React.FC<Props> = ({ src, onEndedNext, isActive, onTogg
     } else {
       audio.pause();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isActive]);
 
   useEffect(() => {
@@ -141,36 +143,50 @@ const CustomAudioPlayer: React.FC<Props> = ({ src, onEndedNext, isActive, onTogg
   }, []);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.controls}>
-        <button onClick={onTogglePlay} className={styles.button}>
-          {isActive ? (
-            <PauseIcon width={30} height={30} fill="#fff" />
-          ) : (
-            <PlayIcon width={30} height={30} fill="#fff" />
-          )}
-        </button>
-        <input
-          type="range"
-          min={0}
-          max={duration || 0}
-          value={currentTime}
-          onChange={(e) => {
-            const audio = audioRef.current;
-            if (audio) audio.currentTime = Number(e.target.value);
-          }}
-          className={styles.slider}
-        />
-        <span className={styles.timer}>
-          {formatTime(currentTime)} / {formatTime(duration)}
-        </span>
-      </div>
-      <div className={`${styles.canvasWrapper} ${!isActive ? styles.hiddenCanvas : ''}`}>
-        <canvas ref={canvasRef} width={500} height={100} className={styles.canvas} />
-      </div>
+    <>
+      {hasError ? (
+        <div className={styles.errorMessage}>Audio file not found</div>
+      ) : (
+        <div className={styles.container}>
+          <div className={styles.controls}>
+            <button onClick={onTogglePlay} className={styles.button}>
+              {isActive ? (
+                <PauseIcon width={30} height={30} fill="#fff" />
+              ) : (
+                <PlayIcon width={30} height={30} fill="#fff" />
+              )}
+            </button>
+            <input
+              type="range"
+              min={0}
+              max={duration || 0}
+              value={currentTime}
+              onChange={(e) => {
+                const audio = audioRef.current;
+                if (audio) audio.currentTime = Number(e.target.value);
+              }}
+              className={styles.slider}
+            />
+            <span className={styles.timer}>
+              {formatTime(currentTime)} / {formatTime(duration)}
+            </span>
+          </div>
+          <div className={`${styles.canvasWrapper} ${!isActive ? styles.hiddenCanvas : ''}`}>
+            <canvas ref={canvasRef} width={500} height={100} className={styles.canvas} />
+          </div>
 
-      <audio ref={audioRef} src={src} crossOrigin="anonymous" className="hidden" />
-    </div>
+          <audio
+            ref={audioRef}
+            src={src}
+            crossOrigin="anonymous"
+            className="hidden"
+            onError={() => {
+              setHasError(true);
+            }}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

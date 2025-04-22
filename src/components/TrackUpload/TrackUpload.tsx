@@ -1,18 +1,19 @@
 import React, { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import styles from './TrackUpload.module.css';
-import { AppDispatch, RootState } from '../../store';
+import { RootState } from '../../store';
 import { removeTrackFile, uploadTrackFile } from '../../features/tracks/trackSlice';
 import Button from '../UI/Button/Button';
 import { toast } from 'react-toastify';
+import { useAppDispatch } from '../../hooks/redux-hook';
 
 interface Props {
   trackId: string;
 }
 
 const TrackUpload: React.FC<Props> = ({ trackId }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [uploading, setUploading] = useState(false);
 

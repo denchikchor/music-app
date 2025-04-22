@@ -33,7 +33,7 @@ const TrackCreateModal: React.FC<Props> = ({ onClose }) => {
 
     try {
       await dispatch(createTrack(data));
-      onClose(); 
+      onClose();
     } catch (error) {
       console.error('Error creating track:', error);
       toast.error('❌ Failed to create track');

@@ -1,11 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { getGenres as fetchGenresApi } from '../../api/genres';
 
-// genresSlice.ts (або можна в tracksSlice)
 export const fetchGenres = createAsyncThunk('genres/fetchGenres', async () => {
-  const res = await fetch('http://localhost:8000/api/genres');
-  if (!res.ok) throw new Error('Unable to get genres');
-  const data = await res.json();
-  return data;
+  return fetchGenresApi();
 });
 
 const genresSlice = createSlice({

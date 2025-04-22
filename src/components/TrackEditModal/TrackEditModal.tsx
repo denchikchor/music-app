@@ -1,10 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store';
 import TrackForm from '../TrackForm/TrackForm';
 import styles from './TrackEditModal.module.css';
 import { Track } from '../../features/tracks/types';
 import { editTrack } from '../../features/tracks/trackSlice';
+import { useAppDispatch } from '../../hooks/redux-hook';
 
 interface Props {
   track: Track;
@@ -12,7 +11,7 @@ interface Props {
 }
 
 const TrackEditModal: React.FC<Props> = ({ track, onClose }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async (data: {
     title: string;

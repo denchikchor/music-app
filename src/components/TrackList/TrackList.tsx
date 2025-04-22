@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import TrackItem from '../TrackItem/TrackItem';
 import styles from './TrackList.module.css';
-import { RootState } from '../../store';
+import { AppDispatch, RootState } from '../../store';
 import { deleteTrack, fetchTracks } from '../../features/tracks/trackSlice';
 import { Track } from '../../features/tracks/types';
 import SortSelect from '../SortSelect/SortSelect';
 import TrackFilters from '../TrackFilters/TrackFilters';
 import { useDebounce } from '../../hooks/useDebounce';
 import Pagination from '../Pagination/Pagination';
-import { useAppDispatch } from '../../hooks/redux-hook';
 
 interface Props {
   onEditTrack: (track: Track) => void;
@@ -18,7 +17,7 @@ interface Props {
 }
 
 const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const tracks = useSelector((state: RootState) => state.tracks.items);
   const status = useSelector((state: RootState) => state.tracks.status);
 
@@ -84,6 +83,7 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
     const nextGlobalIndex = globalIndex + 1;
     if (nextGlobalIndex < filteredSortedTracks.length) {
       const nextPage = Math.floor(nextGlobalIndex / pageSize);
+      const newPageIndex = nextGlobalIndex % pageSize;
       if (nextPage + 1 !== currentPage) {
         setCurrentPage(nextPage + 1);
       }
@@ -150,4 +150,4 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
   );
 };
 
-export default TrackList; 
+export default TrackList;

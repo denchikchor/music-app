@@ -6,7 +6,6 @@ import { Track } from '../../features/tracks/types';
 import CustomAudioPlayer from '../CustomAudioPlayer/CustomAudioPlayer';
 import { ReactComponent as Dots } from '../../assets/dots.svg';
 import { ReactComponent as Bin } from '../../assets/bin.svg';
-import { API_BASE } from '../../api/api';
 
 interface Props {
   track: Track;
@@ -59,7 +58,7 @@ const TrackItem: React.FC<Props> = ({
         {track.audioFile && (
           <div className={styles.audioWrapper}>
             <CustomAudioPlayer
-              src={`${API_BASE}/files/${track.audioFile}`}
+              src={`http://localhost:8000/api/files/${track.audioFile}`}
               isActive={isActive}
               onTogglePlay={onTogglePlay}
               onEndedNext={onTrackEnd}
