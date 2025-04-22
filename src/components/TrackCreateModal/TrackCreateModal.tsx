@@ -1,17 +1,18 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 import TrackForm from '../TrackForm/TrackForm';
 import styles from './TrackCreateModal.module.css';
 import { createTrack } from '../../features/tracks/trackSlice';
 import { toast } from 'react-toastify';
+import { useAppDispatch } from '../../hooks/redux-hook';
 
 interface Props {
   onClose: () => void;
 }
 
 const TrackCreateModal: React.FC<Props> = ({ onClose }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const tracks = useSelector((state: RootState) => state.tracks.items);
 
   const handleSubmit = async (data: {

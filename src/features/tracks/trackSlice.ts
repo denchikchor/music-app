@@ -1,7 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { AppDispatch } from '../../store';
 import type { Track } from './types';
+import type { AppDispatch } from '../../store';
+import type { CreateTrackPayload, EditTrackPayload } from '../../api/api';
+import {
+  getTracks,
+  createTrack as apiCreateTrack,
+  editTrack as apiEditTrack,
+  deleteTrack as apiDeleteTrack,
+  uploadTrackFile as apiUploadTrackFile,
+  removeTrackFile as apiRemoveTrackFile,
+} from '../../api/api';
 
 interface TracksState {
   items: Track[];
@@ -15,99 +23,68 @@ const initialState: TracksState = {
   error: null,
 };
 
-export const fetchTracks = createAsyncThunk<Track[]>('tracks/fetchTracks', async () => {
-  const response = await axios.get('http://localhost:8000/api/tracks?limit=1000');
+// Loading track list
+export const fetchTracks = createAsyncThunk<Track[], void>(
+  'tracks/fetchTracks',
+  async () => {
+    const tracks = await getTracks();
+    return tracks;
+  }
+);
 
-  return response.data.data;
-});
-
+// Creating a new track
 export const createTrack = createAsyncThunk<
   void,
-  {
-    title: string;
-    artist: string;
-    album: string;
-    genres: string[];
-    coverImage?: string;
-  },
+  CreateTrackPayload,
   { dispatch: AppDispatch }
->('tracks/createTrack', async (track, { dispatch }) => {
-  const res = await fetch('http://localhost:8000/api/tracks', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(track),
-  });
-
-  if (!res.ok) {
-    const msg = await res.text();
-    throw new Error(`Create failed: ${msg}`);
+>(
+  'tracks/createTrack',
+  async (payload, { dispatch }) => {
+    await apiCreateTrack(payload);
+    // after creation, update the list
+    await dispatch(fetchTracks());
   }
+);
 
-  await dispatch(fetchTracks());
-});
-
-export const editTrack = createAsyncThunk(
+// Editing a track
+export const editTrack = createAsyncThunk<
+  Track,
+  EditTrackPayload
+>(
   'tracks/editTrack',
-  async (track: {
-    id: string;
-    title: string;
-    artist: string;
-    album: string;
-    genres: string[];
-    coverImage?: string;
-  }) => {
-    const response = await fetch(`http://localhost:8000/api/tracks/${track.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(track),
-    });
-    const data = await response.json();
-    return data;
+  async (payload) => {
+    const updated = await apiEditTrack(payload);
+    return updated;
   }
 );
 
-export const deleteTrack = createAsyncThunk('tracks/deleteTrack', async (id: string) => {
-  await fetch(`http://localhost:8000/api/tracks/${id}`, {
-    method: 'DELETE',
-  });
-  return id;
-});
+// Deleting a single track
+export const deleteTrack = createAsyncThunk<string, string>(
+  'tracks/deleteTrack',
+  async (id) => {
+    await apiDeleteTrack(id);
+    return id;
+  }
+);
 
-export const uploadTrackFile = createAsyncThunk(
+// Uploading an audio file for a track
+export const uploadTrackFile = createAsyncThunk<
+  Track,
+  { id: string; file: FormData }
+>(
   'tracks/uploadTrackFile',
-  async ({ id, file }: { id: string; file: FormData }) => {
-    const res = await fetch(`http://localhost:8000/api/tracks/${id}/upload`, {
-      method: 'POST',
-      body: file,
-    });
-
-    if (!res.ok) throw new Error('Upload failed');
-
-    const updatedTrack = await res.json();
-    return updatedTrack;
+  async ({ id, file }) => {
+    const updated = await apiUploadTrackFile(id, file);
+    return updated;
   }
 );
 
-export const removeTrackFile = createAsyncThunk('tracks/removeTrackFile', async (id: string) => {
-  const res = await fetch(`http://localhost:8000/api/tracks/${id}/file`, {
-    method: 'DELETE',
-  });
-
-  if (!res.ok) throw new Error('Delete failed');
-  return id;
-});
-
-export const deleteTracksBulk = createAsyncThunk(
-  'tracks/deleteTracksBulk',
-  async (ids: string[]) => {
-    await fetch(`http://localhost:3000/api/tracks/bulk-delete`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ids }),
-    });
-    return ids;
+// deleting an audio track file
+export const removeTrackFile = createAsyncThunk<string, string>(
+  'tracks/removeTrackFile',
+  async (id) => {
+    await apiRemoveTrackFile(id);
+    return id;
   }
 );
 
@@ -117,32 +94,7 @@ const tracksSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(deleteTracksBulk.fulfilled, (state, action) => {
-        state.items = state.items.filter((track) => !action.payload.includes(track.id));
-      })
-      .addCase(removeTrackFile.fulfilled, (state, action) => {
-        const index = state.items.findIndex((t) => t.id === action.payload);
-        if (index !== -1) {
-          state.items[index].audioFile = '';
-        }
-      })
-      .addCase(deleteTrack.fulfilled, (state, action) => {
-        state.items = state.items.filter((track) => track.id !== action.payload);
-      })
-
-      .addCase(editTrack.fulfilled, (state, action) => {
-        const index = state.items.findIndex((t) => t.id === action.payload.id);
-        if (index !== -1) {
-          state.items[index] = action.payload;
-        }
-      })
-      .addCase(uploadTrackFile.fulfilled, (state, action) => {
-        const updated = action.payload;
-        const index = state.items.findIndex((t) => t.id === updated.id);
-        if (index !== -1) {
-          state.items[index] = updated;
-        }
-      })
+      // Fetch
       .addCase(fetchTracks.pending, (state) => {
         state.status = 'loading';
       })
@@ -152,7 +104,38 @@ const tracksSlice = createSlice({
       })
       .addCase(fetchTracks.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message || 'Something went wrong.';
+        state.error = action.error.message || 'Failed to load tracks';
+      })
+      // Create
+      .addCase(createTrack.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(createTrack.fulfilled, (state) => {
+        state.status = 'succeeded';
+      })
+      .addCase(createTrack.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || 'Create track failed';
+      })
+      // Edit
+      .addCase(editTrack.fulfilled, (state, action) => {
+        const idx = state.items.findIndex((t) => t.id === action.payload.id);
+        if (idx !== -1) state.items[idx] = action.payload;
+      })
+      // Delete
+      .addCase(deleteTrack.fulfilled, (state, action) => {
+        state.items = state.items.filter((t) => t.id !== action.payload);
+      })
+      // Upload file
+      .addCase(uploadTrackFile.fulfilled, (state, action) => {
+        const updated = action.payload;
+        const idx = state.items.findIndex((t) => t.id === updated.id);
+        if (idx !== -1) state.items[idx] = updated;
+      })
+      // Remove file
+      .addCase(removeTrackFile.fulfilled, (state, action) => {
+        const idx = state.items.findIndex((t) => t.id === action.payload);
+        if (idx !== -1) state.items[idx].audioFile = '';
       });
   },
 });
