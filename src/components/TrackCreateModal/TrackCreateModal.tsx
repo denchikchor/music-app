@@ -6,6 +6,7 @@ import styles from './TrackCreateModal.module.css';
 import { createTrack } from '../../features/tracks/trackSlice';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '../../hooks/redux-hook';
+import ToastMessage from '../UI/ToastMessage/ToastMessage';
 
 interface Props {
   onClose: () => void;
@@ -34,9 +35,10 @@ const TrackCreateModal: React.FC<Props> = ({ onClose }) => {
     try {
       await dispatch(createTrack(data));
       onClose();
+      toast.success(<ToastMessage message="File successfully added!" type="success" />);
     } catch (error) {
       console.error('Error creating track:', error);
-      toast.error('❌ Failed to create track');
+      toast.error(<ToastMessage message="Failed to create track" type="error" />);
     }
   };
 

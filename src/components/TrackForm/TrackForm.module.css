@@ -6,8 +6,15 @@
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  max-width: 500px;
+
   width: 100%;
+  box-sizing: border-box;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 input {
@@ -17,6 +24,7 @@ input {
   border-radius: 8px;
   padding: 0.6rem 1rem;
   font-size: 0.95rem;
+  transition: border-color 0.2s ease;
 }
 
 input::placeholder {
@@ -26,6 +34,12 @@ input::placeholder {
 input:focus {
   border-color: #f33;
   outline: none;
+}
+
+.error {
+  color: #f88;
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 .actions {

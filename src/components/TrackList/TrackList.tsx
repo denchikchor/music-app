@@ -77,7 +77,11 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
   }, [currentPage]);
 
   if (status === 'loading') {
-    return <Preloader />;
+    return (
+      <div data-testid="loading-tracks" data-loading="true">
+        <Preloader />
+      </div>
+    );
   }
 
   return (
@@ -112,9 +116,9 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
         onEditTrack={onEditTrack}
         onDeleteTrack={handleDelete}
         onTrackEnd={handleTrackEnd}
-        selectionMode={selectionMode} // 🆕
-        selectedTracks={selectedTracks} // 🆕
-        toggleTrackSelection={toggleTrackSelection} // 🆕
+        selectionMode={selectionMode}
+        selectedTracks={selectedTracks}
+        toggleTrackSelection={toggleTrackSelection}
       />
 
       <TrackListPagination

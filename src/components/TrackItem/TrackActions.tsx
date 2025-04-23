@@ -7,11 +7,12 @@ interface Props {
   showCheckbox?: boolean;
   checked?: boolean;
   onCheckboxChange?: () => void;
+  trackId: string;
 }
 
-const TrackActions: React.FC<Props> = ({ onEdit, showCheckbox, checked, onCheckboxChange }) => (
+const TrackActions: React.FC<Props> = ({ onEdit, showCheckbox, checked, onCheckboxChange, trackId }) => (
   <div className={styles.mainActions}>
-    <button onClick={onEdit} data-testid="edit-track-button">
+    <button onClick={onEdit} data-testid={`edit-track-${trackId}`}>
       <Dots className={styles.dots} />
     </button>
     {showCheckbox && (

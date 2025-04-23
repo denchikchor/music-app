@@ -30,6 +30,7 @@ const TrackItemView: React.FC<Props> = ({ track, isActive, onEdit, onTogglePlay,
         showCheckbox={selectionMode}
         checked={selected}
         onCheckboxChange={onToggleSelect}
+        trackId={track.id}
       />
 
     </li>

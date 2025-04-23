@@ -23,29 +23,55 @@ const TrackForm: React.FC<Props> = ({ initialValues = {}, onSubmit, onCancel, su
   const [album, setAlbum] = useState(initialValues.album || '');
   const [coverImage, setCoverImage] = useState(initialValues.coverImage || '');
   const [genres, setGenres] = useState<string[]>(initialValues.genres || []);
+  const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState<{
+    title?: string;
+    artist?: string;
+  }>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !artist.trim()) return;
-    onSubmit({ title, artist, album, coverImage, genres });
+
+    const newErrors: typeof errors = {};
+    if (!title.trim()) newErrors.title = 'Track name is required';
+    if (!artist.trim()) newErrors.artist = 'Artist is required';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await onSubmit({ title, artist, album, coverImage, genres });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className={styles.form} data-testid="track-form">
+      <div className={styles.fieldGroup}>
       <input
         data-testid="input-title"
-        required
+        
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Track name"
       />
+      {errors.title && <div className={styles.error} data-testid="error-title">{errors.title}</div>}
+      </div>
+      <div className={styles.fieldGroup}>
       <input
         data-testid="input-artist"
-        required
+        
         value={artist}
         onChange={(e) => setArtist(e.target.value)}
         placeholder="Artist"
       />
+      {errors.artist && <div className={styles.error} data-testid="error-artist">{errors.artist}</div>}
+      </div>
+      
       <input
         data-testid="input-album"
         value={album}
@@ -61,10 +87,16 @@ const TrackForm: React.FC<Props> = ({ initialValues = {}, onSubmit, onCancel, su
       />
 
       <div className={styles.actions}>
-        <button type="submit" data-testid="submit-button">
-          {submitLabel}
+        <button
+          type="submit"
+          data-testid="submit-button"
+          disabled={submitting}
+          data-loading={submitting}
+          aria-disabled={submitting}
+        >
+          {submitting ? 'Saving...' : submitLabel}
         </button>
-        <button type="button" onClick={onCancel}>
+        <button type="button" onClick={onCancel} data-testid="cancel-button">
           Cancel
         </button>
       </div>

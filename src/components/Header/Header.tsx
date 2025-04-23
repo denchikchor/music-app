@@ -12,13 +12,13 @@ interface Props {
 
 const Header: React.FC<Props> = ({ onCreate, searchValue, onSearchChange }) => {
   return (
-    <header className={styles.header}>
+    <header className={styles.header} data-testid="tracks-header">
       <div className={styles.left}>
         <Logo className={styles.logo} />
       </div>
 
       <div className={styles.center}>
-        <SearchInput value={searchValue} onChange={onSearchChange} />
+        <SearchInput data-testid="search-input" value={searchValue} onChange={onSearchChange} />
       </div>
 
       <div className={styles.right}>

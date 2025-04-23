@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TrackForm from '../TrackForm/TrackForm';
 import styles from './TrackEditModal.module.css';
 import { Track } from '../../features/tracks/types';
 import { editTrack } from '../../features/tracks/trackSlice';
 import { useAppDispatch } from '../../hooks/redux-hook';
 import { toast } from 'react-toastify';
+import ConfirmDialog from '../UI/ConfirmDialog/ConfirmDialog';
+import ToastMessage from '../UI/ToastMessage/ToastMessage';
 
 interface Props {
   track: Track;
@@ -14,6 +16,7 @@ interface Props {
 
 const TrackEditModal: React.FC<Props> = ({ track, onClose, onDelete }) => {
   const dispatch = useAppDispatch();
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleSubmit = async (data: {
     title: string;
@@ -24,22 +27,22 @@ const TrackEditModal: React.FC<Props> = ({ track, onClose, onDelete }) => {
   }) => {
     try {
       await dispatch(editTrack({ id: track.id, ...data }));
-      toast.success('Track successfully updated!');
+      toast.success(<ToastMessage message="Track successfully updated!" type="success" />);
       onClose();
     } catch (error) {
       console.error('Track editing error:', error);
-      toast.error('Error while editing track');
+      toast.error(<ToastMessage message="Error while editing track" type="error" />);
     }
   };
 
   const handleDelete = async () => {
     try {
       await onDelete(track.id);
-      toast.success('Track deleted');
+      toast.success(<ToastMessage message="Track deleted" type="success" />);
       onClose();
     } catch (err) {
       console.error('Delete error:', err);
-      toast.error('Error deleting track');
+      toast.error(<ToastMessage message="Error deleting track" type="error" />);
     }
   };
 
@@ -48,11 +51,21 @@ const TrackEditModal: React.FC<Props> = ({ track, onClose, onDelete }) => {
       <div className={styles.modalContent}>
         <div className={styles.header}>
           <h2>Edit track</h2>
-          <button onClick={handleDelete} data-testid={`delete-track-${track.id}`} className={styles.deleteButton}>
+          <button onClick={() => setShowConfirm(true)} data-testid={`delete-track-${track.id}`} className={styles.deleteButton}>
             Delete track
           </button>
         </div>
 
+        {showConfirm && (
+          <ConfirmDialog
+            message="Are you sure you want to delete this track?"
+            onConfirm={() => {
+              handleDelete();
+              setShowConfirm(false);
+            }}
+            onCancel={() => setShowConfirm(false)}
+          />
+        )}
         <TrackForm
           initialValues={{
             title: track.title,

@@ -22,7 +22,7 @@ const GenreSelector: React.FC<Props> = ({ selected, onChange }) => {
   const availableGenres = genres.filter((g) => !selected.includes(g));
 
   return (
-    <div className={styles.genreSelector}>
+    <div className={styles.genreSelector} data-testid="genre-selector">
       <div className={styles.selectedGenres}>
         {selected.map((genre) => (
           <span key={genre} className={styles.tag}>
