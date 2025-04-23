@@ -11,6 +11,9 @@ interface Props {
   onEditTrack: (track: Track) => void;
   onDeleteTrack: (id: string) => void;
   onTrackEnd: (index: number) => void;
+  selectionMode: boolean;
+  selectedTracks: string[];
+  toggleTrackSelection: (id: string) => void;
 }
 
 const TrackListContent: React.FC<Props> = ({
@@ -21,6 +24,9 @@ const TrackListContent: React.FC<Props> = ({
   onEditTrack,
   onDeleteTrack,
   onTrackEnd,
+  selectionMode,
+  selectedTracks,
+  toggleTrackSelection
 }) => {
   if (tracks.length === 0) {
     return <p className={styles.noResults}>Nothing found</p>;
@@ -31,19 +37,18 @@ const TrackListContent: React.FC<Props> = ({
       {tracks.map((track, index) => {
         const globalIndex = startIndex + index;
         return (
-          <TrackItem
+        <TrackItem
             key={track.id}
             track={track}
-            onEdit={onEditTrack}
             isActive={currentPlayingIndex === globalIndex}
-            onTogglePlay={() => {
-              if (currentPlayingIndex === globalIndex) {
-                setCurrentPlayingIndex(null);
-              } else {
-                setCurrentPlayingIndex(globalIndex);
-              }
-            }}
+            onEdit={onEditTrack}
+            onTogglePlay={() => setCurrentPlayingIndex(
+              currentPlayingIndex === globalIndex ? null : globalIndex
+            )}
             onTrackEnd={() => onTrackEnd(index)}
+            selectionMode={selectionMode}
+            selected={selectedTracks.includes(track.id)}
+            onToggleSelect={() => toggleTrackSelection(track.id)}
           />
         );
       })}

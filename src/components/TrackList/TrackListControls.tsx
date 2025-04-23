@@ -1,6 +1,7 @@
 import React from 'react';
 import SortSelect from '../SortSelect/SortSelect';
 import TrackFilters from '../TrackFilters/TrackFilters';
+import styles from './TrackList.module.css';
 
 interface Props {
   sortBy: '' | 'title' | 'artist' | 'genre';
@@ -28,7 +29,7 @@ const TrackListControls: React.FC<Props> = ({
   genres,
 }) => {
   return (
-    <div style={{ display: 'flex', gap: '2rem', justifyContent: 'flex-end', alignItems: 'center' }}>
+    <div className={styles.controls}>
       <SortSelect
         value={sortBy}
         onChange={setSortBy}

@@ -1,0 +1,67 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+    color: #ccc;
+  }
+  
+  .button {
+    background-color: #2a2a2a;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .button:hover:not(:disabled) {
+    background-color: #3a3a3a;
+  }
+  
+  .dangerButton {
+    background-color: #a72626;
+    border: 1px solid #a72626;
+    color: white;
+    border-radius: 8px;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .dangerButton:hover{
+    color:#fff;
+  }
+  
+  .dangerButton:hover:not(:disabled) {
+    background-color: #c73737;
+  }
+  
+  .dangerButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    .wrapper{
+        margin-top: 10px;
+    }
+    
+    .controls {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  

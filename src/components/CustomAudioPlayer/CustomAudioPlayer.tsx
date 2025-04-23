@@ -120,6 +120,7 @@ const CustomAudioPlayer: React.FC<Props> = ({ src, onEndedNext, isActive, onTogg
     const handleEnded = () => {
       onEndedNext?.();
     };
+    
 
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('loadedmetadata', updateProgress);

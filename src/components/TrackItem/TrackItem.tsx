@@ -12,9 +12,12 @@ interface Props {
   onEdit: (track: Track) => void;
   onTogglePlay: () => void;
   onTrackEnd: () => void;
+  selectionMode?: boolean;
+  selected?: boolean;
+  onToggleSelect?: () => void;
 }
 
-const TrackItemView: React.FC<Props> = ({ track, isActive, onEdit, onTogglePlay, onTrackEnd }) => {
+const TrackItemView: React.FC<Props> = ({ track, isActive, onEdit, onTogglePlay, onTrackEnd, selectionMode, selected, onToggleSelect}) => {
   return (
     <li className={styles.trackItem} data-testid={`track-item-${track.id}`}>
       <div className={styles.trackInfo}>
@@ -22,7 +25,13 @@ const TrackItemView: React.FC<Props> = ({ track, isActive, onEdit, onTogglePlay,
         <TrackInfo title={track.title} artist={track.artist} album={track.album} genres={track.genres} id={track.id} />
       </div>
       <TrackPlayer trackId={track.id} audioFile={track.audioFile} isActive={isActive} onTogglePlay={onTogglePlay} onTrackEnd={onTrackEnd} />
-      <TrackActions onEdit={() => onEdit(track)} />
+      <TrackActions
+        onEdit={() => onEdit(track)}
+        showCheckbox={selectionMode}
+        checked={selected}
+        onCheckboxChange={onToggleSelect}
+      />
+
     </li>
   );
 };

@@ -95,6 +95,14 @@
   height: 30px;
 }
 
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #f33; /* або будь-який інший колір */
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
 @media (max-width: 768px) {
   .trackItem {
     flex-direction: column;

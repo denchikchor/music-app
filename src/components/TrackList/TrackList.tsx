@@ -12,6 +12,8 @@ import TrackListContent from './TrackListContent';
 import TrackListPagination from './TrackListPagination';
 import { Track } from '../../features/tracks/types';
 import { useTracks } from '../../hooks/useTracks';
+import { useTrackSelection } from '../../hooks/useTrackSelection';
+import TrackBulkActions from '../TrackBulkActions/TrackBulkActions';
 
 interface Props {
   onEditTrack: (track: Track) => void;
@@ -51,6 +53,15 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
     handleTrackEnd,
   } = useTrackPagination(filteredSortedTracks);
 
+  const {
+    selectionMode,
+    selectedTracks,
+    toggleSelectionMode,
+    toggleTrackSelection,
+    handleSelectAll,
+    handleBulkDelete,
+  } = useTrackSelection();
+
   const handleDelete = (id: string) => {
     dispatch(deleteTrack(id));
   };
@@ -60,6 +71,10 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
       dispatch(fetchTracks());
     }
   }, [dispatch, status]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [currentPage]);
 
   if (status === 'loading') {
     return <Preloader />;
@@ -80,6 +95,15 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
         genres={uniqueGenres}
       />
 
+      <TrackBulkActions
+        selectionMode={selectionMode}
+        selectedCount={selectedTracks.length}
+        totalCount={filteredSortedTracks.length}
+        onToggleMode={toggleSelectionMode}
+        onSelectAll={() => handleSelectAll(filteredSortedTracks.map((t) => t.id))}
+        onBulkDelete={handleBulkDelete}
+      />
+
       <TrackListContent
         tracks={paginatedTracks}
         startIndex={(currentPage - 1) * 10}
@@ -88,6 +112,9 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
         onEditTrack={onEditTrack}
         onDeleteTrack={handleDelete}
         onTrackEnd={handleTrackEnd}
+        selectionMode={selectionMode} // 🆕
+        selectedTracks={selectedTracks} // 🆕
+        toggleTrackSelection={toggleTrackSelection} // 🆕
       />
 
       <TrackListPagination
