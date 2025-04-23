@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
-import TrackItem from '../TrackItem/TrackItem';
 import styles from './TrackList.module.css';
-import { RootState } from '../../store';
 import { deleteTrack, fetchTracks } from '../../features/tracks/trackSlice';
-import { Track } from '../../features/tracks/types';
-import SortSelect from '../SortSelect/SortSelect';
-import TrackFilters from '../TrackFilters/TrackFilters';
 import { useDebounce } from '../../hooks/useDebounce';
-import Pagination from '../Pagination/Pagination';
 import { useAppDispatch } from '../../hooks/redux-hook';
+import { useTrackFiltering } from '../../hooks/useTrackFiltering';
+import { useTrackPagination } from '../../hooks/useTrackPagination';
 import Preloader from '../Preloader/Preloader';
+import TrackListControls from './TrackListControls';
+import TrackListContent from './TrackListContent';
+import TrackListPagination from './TrackListPagination';
+import { Track } from '../../features/tracks/types';
+import { useTracks } from '../../hooks/useTracks';
 
 interface Props {
   onEditTrack: (track: Track) => void;
@@ -20,8 +20,7 @@ interface Props {
 
 const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
   const dispatch = useAppDispatch();
-  const tracks = useSelector((state: RootState) => state.tracks.items);
-  const status = useSelector((state: RootState) => state.tracks.status);
+  const { tracks, status } = useTracks();
 
   const [sortBy, setSortBy] = useState<'' | 'title' | 'artist' | 'genre'>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -29,38 +28,28 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
   const [selectedGenre, setSelectedGenre] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
+  const {
+    filteredSortedTracks,
+    uniqueArtists,
+    uniqueGenres,
+  } = useTrackFiltering(
+    tracks,
+    debouncedSearch,
+    selectedArtist,
+    selectedGenre,
+    sortBy,
+    sortDirection
+  );
 
-  const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number | null>(null);
-
-  const uniqueArtists = Array.from(new Set(tracks.map((t) => t.artist)));
-  const uniqueGenres = Array.from(new Set(tracks.flatMap((t) => t.genres)));
-
-  const filteredSortedTracks = [...tracks]
-    .filter((track) => {
-      const includes = (value: string | undefined) =>
-        value?.toLowerCase().includes(debouncedSearch.toLowerCase()) ?? false;
-
-      const matchesSearch =
-        includes(track.title) || includes(track.artist) || includes(track.album);
-      const artistMatch = selectedArtist ? track.artist === selectedArtist : true;
-      const genreMatch = selectedGenre ? track.genres.includes(selectedGenre) : true;
-
-      return matchesSearch && artistMatch && genreMatch;
-    })
-    .sort((a, b) => {
-      if (!sortBy) return 0;
-      const aValue = sortBy === 'genre' ? a.genres[0] || '' : a[sortBy];
-      const bValue = sortBy === 'genre' ? b.genres[0] || '' : b[sortBy];
-      const result = aValue.localeCompare(bValue);
-      return sortDirection === 'asc' ? result : -result;
-    });
-
-  const totalPages = Math.ceil(filteredSortedTracks.length / pageSize);
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const paginatedTracks = filteredSortedTracks.slice(startIndex, endIndex);
+  const {
+    currentPage,
+    totalPages,
+    paginatedTracks,
+    currentPlayingIndex,
+    setCurrentPage,
+    setCurrentPlayingIndex,
+    handleTrackEnd,
+  } = useTrackPagination(filteredSortedTracks);
 
   const handleDelete = (id: string) => {
     dispatch(deleteTrack(id));
@@ -72,105 +61,40 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
     }
   }, [dispatch, status]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearch, selectedArtist, selectedGenre, sortBy, sortDirection]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, [currentPage]);
-
-  const handleTrackEnd = (index: number) => {
-  const globalIndex = startIndex + index;
-
-  const findNextPlayableIndex = (startIdx: number): number | null => {
-    for (let i = startIdx + 1; i < filteredSortedTracks.length; i++) {
-      if (filteredSortedTracks[i].audioFile) return i;
-    }
-    return null;
-  };
-
-  const nextPlayableIndex = findNextPlayableIndex(globalIndex);
-
-  if (nextPlayableIndex !== null) {
-    const nextPage = Math.floor(nextPlayableIndex / pageSize);
-    const isOnSamePage = nextPage === currentPage - 1;
-
-    if (!isOnSamePage) {
-      setCurrentPage(nextPage + 1);
-      setCurrentPlayingIndex(null); // очистити перед оновленням
-
-      setTimeout(() => {
-        setCurrentPlayingIndex(nextPlayableIndex);
-      }, 500); // почекати, поки відрендериться
-    } else {
-      setCurrentPlayingIndex(nextPlayableIndex);
-    }
-  } else {
-    setCurrentPlayingIndex(null); // більше немає доступних треків
-  }
-};
-
-  
-  
-
   if (status === 'loading') {
     return <Preloader />;
   }
 
   return (
     <div className={styles.trackList}>
-      <div className={styles.controls}>
-        <SortSelect
-          value={sortBy}
-          onChange={setSortBy}
-          direction={sortDirection}
-          onToggleDirection={() => setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
-        />
-        <TrackFilters
-          artists={uniqueArtists}
-          genres={uniqueGenres}
-          selectedArtist={selectedArtist}
-          selectedGenre={selectedGenre}
-          onArtistChange={setSelectedArtist}
-          onGenreChange={setSelectedGenre}
-        />
-      </div>
+      <TrackListControls
+        sortBy={sortBy}
+        sortDirection={sortDirection}
+        setSortBy={setSortBy}
+        setSortDirection={setSortDirection}
+        selectedArtist={selectedArtist}
+        selectedGenre={selectedGenre}
+        setSelectedArtist={setSelectedArtist}
+        setSelectedGenre={setSelectedGenre}
+        artists={uniqueArtists}
+        genres={uniqueGenres}
+      />
 
-      <ul className={`${styles.list} ${styles.fadeIn}`}>
-        {paginatedTracks.length === 0 ? (
-          <p className={styles.noResults}>Nothing found</p>
-        ) : (
-          paginatedTracks.map((track, index) => {
-            const globalIndex = startIndex + index;
-            return (
-              <TrackItem
-                key={track.id}
-                track={track}
-                onEdit={onEditTrack}
-                onDelete={handleDelete}
-                isActive={currentPlayingIndex === globalIndex}
-                onTogglePlay={() => {
-                  if (currentPlayingIndex === globalIndex) {
-                    setCurrentPlayingIndex(null);
-                  } else {
-                    setCurrentPlayingIndex(globalIndex);
-                  }
-                }}
-                onTrackEnd={() => handleTrackEnd(index)}
-              />
-            );
-          })
-        )}
-      </ul>
+      <TrackListContent
+        tracks={paginatedTracks}
+        startIndex={(currentPage - 1) * 10}
+        currentPlayingIndex={currentPlayingIndex}
+        setCurrentPlayingIndex={setCurrentPlayingIndex}
+        onEditTrack={onEditTrack}
+        onDeleteTrack={handleDelete}
+        onTrackEnd={handleTrackEnd}
+      />
 
-      <div className={styles.paginationWrapper}>
-        <Pagination 
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(page) => setCurrentPage(page)}
-        />
-      </div>
+      <TrackListPagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 };

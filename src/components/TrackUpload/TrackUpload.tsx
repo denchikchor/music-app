@@ -85,7 +85,7 @@ const TrackUpload: React.FC<Props> = ({ trackId }) => {
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
       >
-        {uploading ? 'Loading...' : 'Upload the file'}
+        {uploading ? 'Loading...' : 'Upload the audio file'}
       </Button>
       {track.audioFile && (
         <Button
@@ -94,7 +94,7 @@ const TrackUpload: React.FC<Props> = ({ trackId }) => {
           onClick={handleRemove}
           data-testid={`remove-track-file-${track.id}`}
         >
-          Delete the file
+          Delete the audio file
         </Button>
       )}
     </div>

@@ -23,7 +23,7 @@
 
 .clearButton {
   position: absolute;
-  right: 0rem;
+  right: 1rem;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
