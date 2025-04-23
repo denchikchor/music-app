@@ -34,7 +34,6 @@ export const createTrack = createAsyncThunk<void, CreateTrackPayload, { dispatch
   'tracks/createTrack',
   async (payload, { dispatch }) => {
     await apiCreateTrack(payload);
-    // after creation, update the list
     await dispatch(fetchTracks());
   }
 );
@@ -91,24 +90,49 @@ const tracksSlice = createSlice({
         state.error = action.error.message || 'Failed to load tracks';
       })
       // Create
-      .addCase(createTrack.pending, (state) => {
+      .addCase(createTrack.pending, (state, action) => {
         state.status = 'loading';
+      
+        const tempId = 'temp-' + Date.now();
+      
+        const newTrack: Track = {
+          id: tempId,
+          title: action.meta.arg.title,
+          artist: action.meta.arg.artist,
+          album: action.meta.arg.album,
+          genres: action.meta.arg.genres,
+          coverImage: action.meta.arg.coverImage || '',
+          audioFile: '',
+          slug: '',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+      
+        state.items.unshift(newTrack);
       })
+      
       .addCase(createTrack.fulfilled, (state) => {
         state.status = 'succeeded';
+        state.items = state.items.filter((t) => !t.id.startsWith('temp-'));
       })
       .addCase(createTrack.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || 'Create track failed';
+      
+        state.items = state.items.filter((t) => !t.id.startsWith('temp-'));
       })
       // Edit
       .addCase(editTrack.fulfilled, (state, action) => {
         const idx = state.items.findIndex((t) => t.id === action.payload.id);
         if (idx !== -1) state.items[idx] = action.payload;
       })
-      // Delete
-      .addCase(deleteTrack.fulfilled, (state, action) => {
-        state.items = state.items.filter((t) => t.id !== action.payload);
+      // Optimistic delete: remove track from UI before server confirms
+      .addCase(deleteTrack.pending, (state, action) => {
+        const id = action.meta.arg;
+        state.items = state.items.filter((t) => t.id !== id);
+      })
+      .addCase(deleteTrack.rejected, (state, action) => {
+        console.error('❌ Помилка при видаленні треку:', action.error.message);
       })
       // Upload file
       .addCase(uploadTrackFile.fulfilled, (state, action) => {
