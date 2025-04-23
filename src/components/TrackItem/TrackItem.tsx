@@ -5,7 +5,7 @@ import TrackUpload from '../TrackUpload/TrackUpload';
 import { Track } from '../../features/tracks/types';
 import CustomAudioPlayer from '../CustomAudioPlayer/CustomAudioPlayer';
 import { ReactComponent as Dots } from '../../assets/dots.svg';
-import { ReactComponent as Bin } from '../../assets/bin.svg';
+import { API_BASE } from '../../api/config';
 
 interface Props {
   track: Track;
@@ -58,7 +58,7 @@ const TrackItem: React.FC<Props> = ({
         {track.audioFile && (
           <div className={styles.audioWrapper}>
             <CustomAudioPlayer
-              src={`http://localhost:8000/api/files/${track.audioFile}`}
+              src={`${API_BASE}/files/${track.audioFile}`}
               isActive={isActive}
               onTogglePlay={onTogglePlay}
               onEndedNext={onTrackEnd}
@@ -74,9 +74,6 @@ const TrackItem: React.FC<Props> = ({
       <div className={styles.mainActions}>
         <button onClick={() => onEdit(track)} data-testid={`edit-track-${track.id}`}>
           <Dots className={styles.dots} />
-        </button>
-        <button onClick={() => onDelete(track.id)} data-testid={`delete-track-${track.id}`}>
-          <Bin className={styles.bin} />
         </button>
       </div>
     </li>

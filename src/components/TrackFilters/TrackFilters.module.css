@@ -19,3 +19,10 @@
   border-color: #f33;
   outline: none;
 }
+
+@media (max-width: 768px) {
+  .filtersWrapper {
+    justify-content: right;
+
+  }
+}

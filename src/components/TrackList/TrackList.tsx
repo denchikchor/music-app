@@ -1,15 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import TrackItem from '../TrackItem/TrackItem';
 import styles from './TrackList.module.css';
-import { AppDispatch, RootState } from '../../store';
+import { RootState } from '../../store';
 import { deleteTrack, fetchTracks } from '../../features/tracks/trackSlice';
 import { Track } from '../../features/tracks/types';
 import SortSelect from '../SortSelect/SortSelect';
 import TrackFilters from '../TrackFilters/TrackFilters';
 import { useDebounce } from '../../hooks/useDebounce';
 import Pagination from '../Pagination/Pagination';
+import { useAppDispatch } from '../../hooks/redux-hook';
+import Preloader from '../Preloader/Preloader';
 
 interface Props {
   onEditTrack: (track: Track) => void;
@@ -17,7 +19,7 @@ interface Props {
 }
 
 const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const tracks = useSelector((state: RootState) => state.tracks.items);
   const status = useSelector((state: RootState) => state.tracks.status);
 
@@ -79,19 +81,42 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
   }, [currentPage]);
 
   const handleTrackEnd = (index: number) => {
-    const globalIndex = startIndex + index;
-    const nextGlobalIndex = globalIndex + 1;
-    if (nextGlobalIndex < filteredSortedTracks.length) {
-      const nextPage = Math.floor(nextGlobalIndex / pageSize);
-      const newPageIndex = nextGlobalIndex % pageSize;
-      if (nextPage + 1 !== currentPage) {
-        setCurrentPage(nextPage + 1);
-      }
-      setCurrentPlayingIndex(nextGlobalIndex);
-    } else {
-      setCurrentPlayingIndex(null);
+  const globalIndex = startIndex + index;
+
+  const findNextPlayableIndex = (startIdx: number): number | null => {
+    for (let i = startIdx + 1; i < filteredSortedTracks.length; i++) {
+      if (filteredSortedTracks[i].audioFile) return i;
     }
+    return null;
   };
+
+  const nextPlayableIndex = findNextPlayableIndex(globalIndex);
+
+  if (nextPlayableIndex !== null) {
+    const nextPage = Math.floor(nextPlayableIndex / pageSize);
+    const isOnSamePage = nextPage === currentPage - 1;
+
+    if (!isOnSamePage) {
+      setCurrentPage(nextPage + 1);
+      setCurrentPlayingIndex(null); // очистити перед оновленням
+
+      setTimeout(() => {
+        setCurrentPlayingIndex(nextPlayableIndex);
+      }, 500); // почекати, поки відрендериться
+    } else {
+      setCurrentPlayingIndex(nextPlayableIndex);
+    }
+  } else {
+    setCurrentPlayingIndex(null); // більше немає доступних треків
+  }
+};
+
+  
+  
+
+  if (status === 'loading') {
+    return <Preloader />;
+  }
 
   return (
     <div className={styles.trackList}>

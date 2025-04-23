@@ -85,7 +85,7 @@ const TrackUpload: React.FC<Props> = ({ trackId }) => {
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
       >
-        {uploading ? 'Loading...' : 'Download the file'}
+        {uploading ? 'Loading...' : 'Upload the file'}
       </Button>
       {track.audioFile && (
         <Button

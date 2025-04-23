@@ -6,11 +6,19 @@ import TrackEditModal from './components/TrackEditModal/TrackEditModal';
 import { Track } from './features/tracks/types';
 import { ToastContainer } from 'react-toastify';
 import Header from './components/Header/Header';
+import { useAppDispatch } from './hooks/redux-hook';
+import { deleteTrack } from './features/tracks/trackSlice';
+
 
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [editingTrack, setEditingTrack] = useState<Track | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const dispatch = useAppDispatch();
+
+  const handleDelete = (id: string) => {
+      dispatch(deleteTrack(id));
+    };
 
   return (
     <>
@@ -25,7 +33,7 @@ function App() {
 
       {isModalOpen && <TrackCreateModal onClose={() => setModalOpen(false)} />}
       {editingTrack && (
-        <TrackEditModal track={editingTrack} onClose={() => setEditingTrack(null)} />
+        <TrackEditModal onDelete={handleDelete} track={editingTrack} onClose={() => setEditingTrack(null)} />
       )}
       <ToastContainer position="top-right" autoClose={3000} />
     </>

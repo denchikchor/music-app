@@ -8,10 +8,20 @@ ul {
 .paginationWrapper {
   margin-top: auto;
   padding-top: 1.5rem;
+  display: flex;
+  justify-content: center;
 }
 .controls {
   display: flex;
   justify-content: end;
   align-items: center;
+  flex-wrap: wrap;
   gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .controls {
+    justify-content: right;
+    gap: 1rem;
+  }
 }

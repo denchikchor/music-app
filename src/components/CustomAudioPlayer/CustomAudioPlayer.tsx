@@ -151,9 +151,9 @@ const CustomAudioPlayer: React.FC<Props> = ({ src, onEndedNext, isActive, onTogg
           <div className={styles.controls}>
             <button onClick={onTogglePlay} className={styles.button}>
               {isActive ? (
-                <PauseIcon width={30} height={30} fill="#fff" />
+                <PauseIcon className={styles.icon} />
               ) : (
-                <PlayIcon width={30} height={30} fill="#fff" />
+                <PlayIcon className={styles.icon}  />
               )}
             </button>
             <input
