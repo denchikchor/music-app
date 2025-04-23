@@ -35,7 +35,6 @@ const TrackListContent: React.FC<Props> = ({
             key={track.id}
             track={track}
             onEdit={onEditTrack}
-            onDelete={onDeleteTrack}
             isActive={currentPlayingIndex === globalIndex}
             onTogglePlay={() => {
               if (currentPlayingIndex === globalIndex) {

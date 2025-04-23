@@ -10,12 +10,11 @@ interface Props {
   track: Track;
   isActive: boolean;
   onEdit: (track: Track) => void;
-  onDelete: (id: string) => void;
   onTogglePlay: () => void;
   onTrackEnd: () => void;
 }
 
-const TrackItemView: React.FC<Props> = ({ track, isActive, onEdit, onDelete, onTogglePlay, onTrackEnd }) => {
+const TrackItemView: React.FC<Props> = ({ track, isActive, onEdit, onTogglePlay, onTrackEnd }) => {
   return (
     <li className={styles.trackItem} data-testid={`track-item-${track.id}`}>
       <div className={styles.trackInfo}>
