@@ -2,17 +2,18 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import TrackForm from '../TrackForm/TrackForm';
-import styles from './TrackCreateModal.module.css';
 import { createTrack } from '../../features/tracks/trackSlice';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '../../hooks/redux-hook';
 import ToastMessage from '../UI/ToastMessage/ToastMessage';
+import ModalWrapper from '../UI/ModalWrapper/ModalWrapper';
 
 interface Props {
   onClose: () => void;
+  onCreated: () => void;
 }
 
-const TrackCreateModal: React.FC<Props> = ({ onClose }) => {
+const TrackCreateModal: React.FC<Props> = ({ onClose, onCreated }) => {
   const dispatch = useAppDispatch();
   const tracks = useSelector((state: RootState) => state.tracks.items);
 
@@ -34,8 +35,9 @@ const TrackCreateModal: React.FC<Props> = ({ onClose }) => {
 
     try {
       await dispatch(createTrack(data));
+      onCreated();
       onClose();
-      toast.success(<ToastMessage message="File successfully added!" type="success" />);
+      toast.success(<ToastMessage message="Track successfully added!" type="success" />);
     } catch (error) {
       console.error('Error creating track:', error);
       toast.error(<ToastMessage message="Failed to create track" type="error" />);
@@ -43,12 +45,10 @@ const TrackCreateModal: React.FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <div className={styles.modal}>
-      <div className={styles.modalContent}>
-        <h2 data-testid="tracks-header">Create a new track</h2>
-        <TrackForm submitLabel="Create" onSubmit={handleSubmit} onCancel={onClose} />
-      </div>
-    </div>
+    <ModalWrapper onClose={onClose}>
+      <h2 data-testid="tracks-header">Create a new track</h2>
+      <TrackForm submitLabel="Create" onSubmit={handleSubmit} onCancel={onClose} />
+    </ModalWrapper>
   );
 };
 

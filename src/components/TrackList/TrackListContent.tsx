@@ -26,7 +26,7 @@ const TrackListContent: React.FC<Props> = ({
   onTrackEnd,
   selectionMode,
   selectedTracks,
-  toggleTrackSelection
+  toggleTrackSelection,
 }) => {
   if (tracks.length === 0) {
     return <p className={styles.noResults}>Nothing found</p>;
@@ -37,14 +37,14 @@ const TrackListContent: React.FC<Props> = ({
       {tracks.map((track, index) => {
         const globalIndex = startIndex + index;
         return (
-        <TrackItem
+          <TrackItem
             key={track.id}
             track={track}
             isActive={currentPlayingIndex === globalIndex}
             onEdit={onEditTrack}
-            onTogglePlay={() => setCurrentPlayingIndex(
-              currentPlayingIndex === globalIndex ? null : globalIndex
-            )}
+            onTogglePlay={() =>
+              setCurrentPlayingIndex(currentPlayingIndex === globalIndex ? null : globalIndex)
+            }
             onTrackEnd={() => onTrackEnd(index)}
             selectionMode={selectionMode}
             selected={selectedTracks.includes(track.id)}

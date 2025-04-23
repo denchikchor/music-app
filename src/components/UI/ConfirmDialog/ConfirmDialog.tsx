@@ -13,8 +13,12 @@ const ConfirmDialog: React.FC<Props> = ({ message, onConfirm, onCancel }) => {
       <div className={styles.dialog}>
         <p>{message}</p>
         <div className={styles.actions}>
-          <button onClick={onConfirm} data-testid="confirm-delete">Delete</button>
-          <button onClick={onCancel} data-testid="cancel-delete">Cancel</button>
+          <button onClick={onConfirm} data-testid="confirm-delete">
+            Delete
+          </button>
+          <button onClick={onCancel} data-testid="cancel-delete">
+            Cancel
+          </button>
         </div>
       </div>
     </div>

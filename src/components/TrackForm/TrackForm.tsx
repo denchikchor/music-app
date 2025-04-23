@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './TrackForm.module.css';
-import GenreSelector from '../genres/GenreSelector';
+import GenreSelector from '../GenreSelector/GenreSelector';
 
 interface TrackFormData {
   title: string;
@@ -52,26 +52,32 @@ const TrackForm: React.FC<Props> = ({ initialValues = {}, onSubmit, onCancel, su
   return (
     <form onSubmit={handleSubmit} className={styles.form} data-testid="track-form">
       <div className={styles.fieldGroup}>
-      <input
-        data-testid="input-title"
-        
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Track name"
-      />
-      {errors.title && <div className={styles.error} data-testid="error-title">{errors.title}</div>}
+        <input
+          data-testid="input-title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Track name"
+        />
+        {errors.title && (
+          <div className={styles.error} data-testid="error-title">
+            {errors.title}
+          </div>
+        )}
       </div>
       <div className={styles.fieldGroup}>
-      <input
-        data-testid="input-artist"
-        
-        value={artist}
-        onChange={(e) => setArtist(e.target.value)}
-        placeholder="Artist"
-      />
-      {errors.artist && <div className={styles.error} data-testid="error-artist">{errors.artist}</div>}
+        <input
+          data-testid="input-artist"
+          value={artist}
+          onChange={(e) => setArtist(e.target.value)}
+          placeholder="Artist"
+        />
+        {errors.artist && (
+          <div className={styles.error} data-testid="error-artist">
+            {errors.artist}
+          </div>
+        )}
       </div>
-      
+
       <input
         data-testid="input-album"
         value={album}

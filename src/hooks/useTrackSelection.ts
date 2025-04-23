@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAppDispatch } from './redux-hook';
 import { deleteTrack } from '../features/tracks/trackSlice';
+import { PAGE_SIZE } from '../constants/pagination';
 
 export const useTrackSelection = () => {
   const dispatch = useAppDispatch();
@@ -18,12 +19,24 @@ export const useTrackSelection = () => {
     );
   };
 
-  const handleSelectAll = (allIds: string[]) => {
-    setSelectedTracks(allIds);
+  const handleSelectAll = (ids: string[]) => {
+    setSelectedTracks(ids);
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = (
+    currentPage: number,
+    totalTracks: number,
+    setCurrentPage: (page: number) => void
+  ) => {
     selectedTracks.forEach((id) => dispatch(deleteTrack(id)));
+
+    const remainingCount = totalTracks - selectedTracks.length;
+    const newTotalPages = Math.ceil(remainingCount / PAGE_SIZE);
+
+    if (currentPage > newTotalPages && newTotalPages > 0) {
+      setCurrentPage(newTotalPages);
+    }
+
     setSelectedTracks([]);
     setSelectionMode(false);
   };

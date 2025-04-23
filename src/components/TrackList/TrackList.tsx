@@ -14,13 +14,21 @@ import { Track } from '../../features/tracks/types';
 import { useTracks } from '../../hooks/useTracks';
 import { useTrackSelection } from '../../hooks/useTrackSelection';
 import TrackBulkActions from '../TrackBulkActions/TrackBulkActions';
+import { PAGE_SIZE } from '../../constants/pagination';
 
 interface Props {
   onEditTrack: (track: Track) => void;
   searchQuery: string;
+  forceGoToFirstPage: boolean;
+  setForceGoToFirstPage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
+const TrackList: React.FC<Props> = ({
+  onEditTrack,
+  searchQuery,
+  forceGoToFirstPage,
+  setForceGoToFirstPage,
+}) => {
   const dispatch = useAppDispatch();
   const { tracks, status } = useTracks();
 
@@ -30,11 +38,7 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
   const [selectedGenre, setSelectedGenre] = useState('');
   const debouncedSearch = useDebounce(searchQuery, 300);
 
-  const {
-    filteredSortedTracks,
-    uniqueArtists,
-    uniqueGenres,
-  } = useTrackFiltering(
+  const { filteredSortedTracks, uniqueArtists, uniqueGenres } = useTrackFiltering(
     tracks,
     debouncedSearch,
     selectedArtist,
@@ -73,6 +77,15 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
   }, [dispatch, status]);
 
   useEffect(() => {
+    if (forceGoToFirstPage) {
+      setCurrentPage(1);
+      window.scrollTo({ top: 0 });
+      setForceGoToFirstPage(false);
+    }
+    // eslint-disable-next-line
+  }, [forceGoToFirstPage]);
+
+  useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [currentPage]);
 
@@ -102,15 +115,17 @@ const TrackList: React.FC<Props> = ({ onEditTrack, searchQuery }) => {
       <TrackBulkActions
         selectionMode={selectionMode}
         selectedCount={selectedTracks.length}
-        totalCount={filteredSortedTracks.length}
+        totalCount={paginatedTracks.length}
         onToggleMode={toggleSelectionMode}
-        onSelectAll={() => handleSelectAll(filteredSortedTracks.map((t) => t.id))}
-        onBulkDelete={handleBulkDelete}
+        onSelectAll={() => handleSelectAll(paginatedTracks.map((t) => t.id))}
+        onBulkDelete={() =>
+          handleBulkDelete(currentPage, filteredSortedTracks.length, setCurrentPage)
+        }
       />
 
       <TrackListContent
         tracks={paginatedTracks}
-        startIndex={(currentPage - 1) * 10}
+        startIndex={(currentPage - 1) * PAGE_SIZE}
         currentPlayingIndex={currentPlayingIndex}
         setCurrentPlayingIndex={setCurrentPlayingIndex}
         onEditTrack={onEditTrack}

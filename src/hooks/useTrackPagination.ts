@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Track } from '../features/tracks/types';
+import { PAGE_SIZE } from '../constants/pagination';
 
 interface UseTrackPaginationResult {
   currentPage: number;
@@ -17,13 +18,11 @@ export const useTrackPagination = (filteredSortedTracks: Track[]): UseTrackPagin
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number | null>(null);
 
-  const pageSize = 10;
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
 
   const paginatedTracks = filteredSortedTracks.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(filteredSortedTracks.length / pageSize);
+  const totalPages = Math.ceil(filteredSortedTracks.length / PAGE_SIZE);
 
   const handleTrackEnd = (index: number) => {
     const globalIndex = startIndex + index;
@@ -38,7 +37,7 @@ export const useTrackPagination = (filteredSortedTracks: Track[]): UseTrackPagin
     const nextPlayableIndex = findNextPlayableIndex(globalIndex);
 
     if (nextPlayableIndex !== null) {
-      const nextPage = Math.floor(nextPlayableIndex / pageSize);
+      const nextPage = Math.floor(nextPlayableIndex / PAGE_SIZE);
       const isOnSamePage = nextPage === currentPage - 1;
 
       if (!isOnSamePage) {

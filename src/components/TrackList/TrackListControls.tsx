@@ -34,9 +34,7 @@ const TrackListControls: React.FC<Props> = ({
         value={sortBy}
         onChange={setSortBy}
         direction={sortDirection}
-        onToggleDirection={() =>
-          setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))
-        }
+        onToggleDirection={() => setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
       />
       <TrackFilters
         artists={artists}

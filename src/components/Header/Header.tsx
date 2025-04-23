@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Header.module.css';
 import Button from '../UI/Button/Button';
 import SearchInput from '../SearchInput/SearchInput';
@@ -11,8 +11,25 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ onCreate, searchValue, onSearchChange }) => {
+  const [hidden, setHidden] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      setHidden(currentY > lastScrollY && currentY > 80);
+      setLastScrollY(currentY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
   return (
-    <header className={styles.header} data-testid="tracks-header">
+    <header
+      className={`${styles.header} ${hidden ? styles.hidden : ''}`}
+      data-testid="tracks-header"
+    >
       <div className={styles.left}>
         <Logo className={styles.logo} />
       </div>

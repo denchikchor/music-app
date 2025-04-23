@@ -120,7 +120,6 @@ const CustomAudioPlayer: React.FC<Props> = ({ src, onEndedNext, isActive, onTogg
     const handleEnded = () => {
       onEndedNext?.();
     };
-    
 
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('loadedmetadata', updateProgress);
@@ -154,7 +153,7 @@ const CustomAudioPlayer: React.FC<Props> = ({ src, onEndedNext, isActive, onTogg
               {isActive ? (
                 <PauseIcon className={styles.icon} />
               ) : (
-                <PlayIcon className={styles.icon}  />
+                <PlayIcon className={styles.icon} />
               )}
             </button>
             <input

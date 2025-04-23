@@ -39,23 +39,28 @@ const GenreSelector: React.FC<Props> = ({ selected, onChange }) => {
       </div>
 
       {availableGenres.length > 0 && (
-        <select
-          className={styles.select}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value && !selected.includes(value)) {
-              onChange([...selected, value]);
-            }
-          }}
-          value=""
-        >
-          <option value="">+ Add genre</option>
-          {availableGenres.map((genre) => (
-            <option key={genre} value={genre}>
-              {genre}
-            </option>
-          ))}
-        </select>
+        <div className={styles.customSelectWrapper}>
+          <select
+            className={styles.select}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value && !selected.includes(value)) {
+                onChange([...selected, value]);
+              }
+            }}
+            value=""
+          >
+            <option value="">+ Add genre</option>
+            {availableGenres.map((genre) => (
+              <option key={genre} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </select>
+          <svg className={styles.arrow} viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="1,1 6,6 11,1" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </div>
       )}
     </div>
   );

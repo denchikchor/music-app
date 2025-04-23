@@ -92,9 +92,9 @@ const tracksSlice = createSlice({
       // Create
       .addCase(createTrack.pending, (state, action) => {
         state.status = 'loading';
-      
+
         const tempId = 'temp-' + Date.now();
-      
+
         const newTrack: Track = {
           id: tempId,
           title: action.meta.arg.title,
@@ -107,10 +107,10 @@ const tracksSlice = createSlice({
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
-      
+
         state.items.unshift(newTrack);
       })
-      
+
       .addCase(createTrack.fulfilled, (state) => {
         state.status = 'succeeded';
         state.items = state.items.filter((t) => !t.id.startsWith('temp-'));
@@ -118,7 +118,7 @@ const tracksSlice = createSlice({
       .addCase(createTrack.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || 'Create track failed';
-      
+
         state.items = state.items.filter((t) => !t.id.startsWith('temp-'));
       })
       // Edit

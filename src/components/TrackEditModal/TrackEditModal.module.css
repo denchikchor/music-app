@@ -58,11 +58,11 @@ h2 {
 
 .deleteButton:hover {
   background-color: #e63939;
-  color:#fff;
+  color: #fff;
 }
 
-@media (max-width: 768px){
-  .modalContent{
-    padding:0rem 1rem;
+@media (max-width: 768px) {
+  .modalContent {
+    padding: 0rem 1rem;
   }
 }

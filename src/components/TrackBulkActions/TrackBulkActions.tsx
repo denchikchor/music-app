@@ -34,52 +34,42 @@ const TrackBulkActions: React.FC<Props> = ({
       setShowConfirm(false);
     }
   };
-  
 
   return (
-<div className={styles.wrapper}>
-  <button
-    onClick={onToggleMode}
-    className={styles.button}
-    data-testid="toggle-selection-mode"
-  >
-    {selectionMode ? 'Cancel' : 'Bulk select'}
-  </button>
-
-  {selectionMode && (
-    <div className={styles.controls}>
-      <span data-testid="selection-count">
-        Selected: {selectedCount} / {totalCount}
-      </span>
-      <button
-        onClick={onSelectAll}
-        className={styles.button}
-        data-testid="select-all"
-      >
-        Select all
-      </button>
-      <button
-        onClick={() => setShowConfirm(true)}
-        disabled={selectedCount === 0}
-        data-loading={selectedCount === 0}
-        aria-disabled={selectedCount === 0}
-        data-testid="delete-selected"
-        className={styles.dangerButton}
-      >
-        Delete selected
+    <div className={styles.wrapper}>
+      <button onClick={onToggleMode} className={styles.button} data-testid="toggle-selection-mode">
+        {selectionMode ? 'Cancel' : 'Bulk select'}
       </button>
 
-      {showConfirm && (
-        <ConfirmDialog
-          message="Are you sure you want to delete these tracks?"
-          onConfirm={handleConfirmDelete}
-          onCancel={() => setShowConfirm(false)}
-        />
+      {selectionMode && (
+        <div className={styles.controls}>
+          <span data-testid="selection-count">
+            Selected: {selectedCount} / {totalCount}
+          </span>
+          <button onClick={onSelectAll} className={styles.button} data-testid="select-all">
+            Select all
+          </button>
+          <button
+            onClick={() => setShowConfirm(true)}
+            disabled={selectedCount === 0}
+            data-loading={selectedCount === 0}
+            aria-disabled={selectedCount === 0}
+            data-testid="delete-selected"
+            className={styles.dangerButton}
+          >
+            Delete selected
+          </button>
+
+          {showConfirm && (
+            <ConfirmDialog
+              message="Are you sure you want to delete these tracks?"
+              onConfirm={handleConfirmDelete}
+              onCancel={() => setShowConfirm(false)}
+            />
+          )}
+        </div>
       )}
     </div>
-  )}
-</div>
-
   );
 };
 

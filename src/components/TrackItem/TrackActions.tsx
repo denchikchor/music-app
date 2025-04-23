@@ -10,21 +10,27 @@ interface Props {
   trackId: string;
 }
 
-const TrackActions: React.FC<Props> = ({ onEdit, showCheckbox, checked, onCheckboxChange, trackId }) => (
+const TrackActions: React.FC<Props> = ({
+  onEdit,
+  showCheckbox,
+  checked,
+  onCheckboxChange,
+  trackId,
+}) => (
   <div className={styles.mainActions}>
     <button onClick={onEdit} data-testid={`edit-track-${trackId}`}>
       <Dots className={styles.dots} />
     </button>
     {showCheckbox && (
-  <div className={styles.checkboxWrapper}>
-    <input
-      type="checkbox"
-      checked={checked}
-      onChange={onCheckboxChange}
-      className={styles.checkbox}
-    />
-  </div>
-)}
+      <div className={styles.checkboxWrapper}>
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={onCheckboxChange}
+          className={styles.checkbox}
+        />
+      </div>
+    )}
   </div>
 );
 

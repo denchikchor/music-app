@@ -7,6 +7,7 @@ import { useAppDispatch } from '../../hooks/redux-hook';
 import { toast } from 'react-toastify';
 import ConfirmDialog from '../UI/ConfirmDialog/ConfirmDialog';
 import ToastMessage from '../UI/ToastMessage/ToastMessage';
+import ModalWrapper from '../UI/ModalWrapper/ModalWrapper';
 
 interface Props {
   track: Track;
@@ -47,39 +48,41 @@ const TrackEditModal: React.FC<Props> = ({ track, onClose, onDelete }) => {
   };
 
   return (
-    <div className={styles.modal}>
-      <div className={styles.modalContent}>
-        <div className={styles.header}>
-          <h2>Edit track</h2>
-          <button onClick={() => setShowConfirm(true)} data-testid={`delete-track-${track.id}`} className={styles.deleteButton}>
-            Delete track
-          </button>
-        </div>
-
-        {showConfirm && (
-          <ConfirmDialog
-            message="Are you sure you want to delete this track?"
-            onConfirm={() => {
-              handleDelete();
-              setShowConfirm(false);
-            }}
-            onCancel={() => setShowConfirm(false)}
-          />
-        )}
-        <TrackForm
-          initialValues={{
-            title: track.title,
-            artist: track.artist,
-            album: track.album,
-            genres: track.genres,
-            coverImage: track.coverImage || '',
-          }}
-          onSubmit={handleSubmit}
-          onCancel={onClose}
-          submitLabel="Save"
-        />
+    <ModalWrapper onClose={onClose}>
+      <div className={styles.header}>
+        <h2>Edit track</h2>
+        <button
+          onClick={() => setShowConfirm(true)}
+          data-testid={`delete-track-${track.id}`}
+          className={styles.deleteButton}
+        >
+          Delete track
+        </button>
       </div>
-    </div>
+
+      {showConfirm && (
+        <ConfirmDialog
+          message="Are you sure you want to delete this track?"
+          onConfirm={() => {
+            handleDelete();
+            setShowConfirm(false);
+          }}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
+      <TrackForm
+        initialValues={{
+          title: track.title,
+          artist: track.artist,
+          album: track.album,
+          genres: track.genres,
+          coverImage: track.coverImage || '',
+        }}
+        onSubmit={handleSubmit}
+        onCancel={onClose}
+        submitLabel="Save"
+      />
+    </ModalWrapper>
   );
 };
 

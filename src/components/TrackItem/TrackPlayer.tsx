@@ -12,7 +12,13 @@ interface Props {
   onTrackEnd: () => void;
 }
 
-const TrackPlayer: React.FC<Props> = ({ trackId, audioFile, isActive, onTogglePlay, onTrackEnd }) => (
+const TrackPlayer: React.FC<Props> = ({
+  trackId,
+  audioFile,
+  isActive,
+  onTogglePlay,
+  onTrackEnd,
+}) => (
   <div className={styles.player}>
     {audioFile && (
       <div className={styles.audioWrapper}>

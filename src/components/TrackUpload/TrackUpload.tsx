@@ -46,10 +46,10 @@ const TrackUpload: React.FC<Props> = ({ trackId }) => {
     setUploading(true);
     try {
       await dispatch(uploadTrackFile({ id: trackId, file: formData }));
-      toast.success(<ToastMessage message="File successfully uploaded!" type="success" />)
+      toast.success(<ToastMessage message="File successfully uploaded!" type="success" />);
     } catch (err) {
       console.error('Upload error:', err);
-      toast.error(<ToastMessage message="Error while uploading file" type="error" />)
+      toast.error(<ToastMessage message="Error while uploading file" type="error" />);
     } finally {
       setUploading(false);
       if (inputRef.current) {
@@ -80,17 +80,17 @@ const TrackUpload: React.FC<Props> = ({ trackId }) => {
         style={{ display: 'none' }}
         onChange={handleFileChange}
       />
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => inputRef.current?.click()}
-          disabled={uploading}
-          data-loading={uploading}
-          aria-disabled={uploading}
-          data-testid={`upload-track-${trackId}`}
-        >
-          {uploading ? 'Loading...' : 'Upload the audio file'}
-        </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => inputRef.current?.click()}
+        disabled={uploading}
+        data-loading={uploading}
+        aria-disabled={uploading}
+        data-testid={`upload-track-${trackId}`}
+      >
+        {uploading ? 'Loading...' : 'Upload the audio file'}
+      </Button>
       {track.audioFile && (
         <Button
           variant="danger"
@@ -100,18 +100,17 @@ const TrackUpload: React.FC<Props> = ({ trackId }) => {
         >
           Delete the audio file
         </Button>
-        
       )}
       {showConfirm && (
-          <ConfirmDialog
-            message="Are you sure you want to delete this track?"
-            onConfirm={() => {
-              handleRemove();
-              setShowConfirm(false);
-            }}
-            onCancel={() => setShowConfirm(false)}
-          />
-        )}
+        <ConfirmDialog
+          message="Are you sure you want to delete this track?"
+          onConfirm={() => {
+            handleRemove();
+            setShowConfirm(false);
+          }}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </div>
   );
 };

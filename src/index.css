@@ -1,4 +1,7 @@
-/* index.css — глобальні стилі */
+* {
+  box-sizing: border-box;
+}
+
 body,
 #root {
   height: 100%;
@@ -34,8 +37,8 @@ button {
   font-size: 1rem;
 }
 
-button:hover {
-  color: #f33;
+button:focus {
+  outline: none;
 }
 
 input,
@@ -54,10 +57,8 @@ select:focus {
   border-color: #f33;
 }
 
-
 @media (max-width: 768px) {
   body {
-    
     padding: 1rem;
   }
 }

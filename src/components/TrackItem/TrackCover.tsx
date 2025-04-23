@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './TrackItem.module.css';
-import coverImage from '../../assets/default_cover.jpg'
+import coverImage from '../../assets/default_cover.jpg';
 
 interface Props {
   src?: string;

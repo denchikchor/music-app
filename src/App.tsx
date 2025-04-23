@@ -9,16 +9,16 @@ import Header from './components/Header/Header';
 import { useAppDispatch } from './hooks/redux-hook';
 import { deleteTrack } from './features/tracks/trackSlice';
 
-
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [editingTrack, setEditingTrack] = useState<Track | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [forceGoToFirstPage, setForceGoToFirstPage] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleDelete = (id: string) => {
-      dispatch(deleteTrack(id));
-    };
+    dispatch(deleteTrack(id));
+  };
 
   return (
     <>
@@ -28,12 +28,26 @@ function App() {
         onSearchChange={setSearchQuery}
       />
       <main className="content">
-        <TrackList onEditTrack={(track) => setEditingTrack(track)} searchQuery={searchQuery} />
+        <TrackList
+          onEditTrack={(track) => setEditingTrack(track)}
+          searchQuery={searchQuery}
+          forceGoToFirstPage={forceGoToFirstPage}
+          setForceGoToFirstPage={setForceGoToFirstPage}
+        />
       </main>
 
-      {isModalOpen && <TrackCreateModal onClose={() => setModalOpen(false)} />}
+      {isModalOpen && (
+        <TrackCreateModal
+          onClose={() => setModalOpen(false)}
+          onCreated={() => setForceGoToFirstPage(true)}
+        />
+      )}
       {editingTrack && (
-        <TrackEditModal onDelete={handleDelete} track={editingTrack} onClose={() => setEditingTrack(null)} />
+        <TrackEditModal
+          onDelete={handleDelete}
+          track={editingTrack}
+          onClose={() => setEditingTrack(null)}
+        />
       )}
       <ToastContainer position="top-right" autoClose={3000} />
     </>

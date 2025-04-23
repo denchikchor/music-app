@@ -20,33 +20,42 @@ const TrackFilters: React.FC<Props> = ({
 }) => {
   return (
     <div className={styles.filtersWrapper}>
-      <select
-        value={selectedArtist}
-        onChange={(e) => onArtistChange(e.target.value)}
-        className={styles.select}
-        data-testid="filter-artist"
-      >
-        <option value="">All artists</option>
-        {artists.map((artist) => (
-          <option key={artist} value={artist}>
-            {artist}
-          </option>
-        ))}
-      </select>
-
-      <select
-        value={selectedGenre}
-        onChange={(e) => onGenreChange(e.target.value)}
-        className={styles.select}
-        data-testid="filter-genre"
-      >
-        <option value="">All genres</option>
-        {genres.map((genre) => (
-          <option key={genre} value={genre}>
-            {genre}
-          </option>
-        ))}
-      </select>
+      <div className={styles.customSelectWrapper}>
+        <select
+          value={selectedArtist}
+          onChange={(e) => onArtistChange(e.target.value)}
+          className={styles.select}
+          data-testid="filter-artist"
+        >
+          <option value="">All artists</option>
+          {artists.map((artist) => (
+            <option key={artist} value={artist}>
+              {artist}
+            </option>
+          ))}
+        </select>
+        <svg className={styles.arrow} viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="1,1 6,6 11,1" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      </div>
+      <div className={styles.customSelectWrapper}>
+        <select
+          value={selectedGenre}
+          onChange={(e) => onGenreChange(e.target.value)}
+          className={styles.select}
+          data-testid="filter-genre"
+        >
+          <option value="">All genres</option>
+          {genres.map((genre) => (
+            <option key={genre} value={genre}>
+              {genre}
+            </option>
+          ))}
+        </select>
+        <svg className={styles.arrow} viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="1,1 6,6 11,1" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      </div>
     </div>
   );
 };
