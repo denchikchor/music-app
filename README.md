@@ -1,46 +1,128 @@
-# Getting Started with Create React App
+🎵 Music App
+A modern, responsive web application for managing and playing your music collection. Built with React, TypeScript, Vite, and Vitest, it offers features like track uploading, filtering, sorting, playback with waveform visualization, bulk actions, and comprehensive test coverage.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+🚀 Features
+Track Management
+Create, edit, and delete tracks with metadata (title, artist, album, genres, cover image).
 
-## Available Scripts
+File Uploads
+Upload or remove audio files (MP3/WAV) per track, with size/type validation.
 
-In the project directory, you can run:
+Custom Audio Player
+Play/pause, seek, and visualize waveform in real time.
 
-### `npm start`
+Filtering & Sorting
+Filter by artist or genre and sort by title, artist, or genre.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Pagination
+Browse tracks in pages (configurable page size), with “go to first page” logic on search/filter changes.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Bulk Actions
+Toggle bulk-select mode to choose multiple tracks and delete them in one click.
 
-### `npm test`
+Optimistic Updates
+UI updates immediately when deleting tracks, before server confirmation.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Responsive Design
+Adapts to desktop and mobile layouts.
 
-### `npm run build`
+Keyboard & Accessibility
+Close modals with ESC or click outside; form fields support autofill; ARIA attributes on disabled controls.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Testing
+Unit and integration tests with Vitest, Testing Library, and DOM matchers.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+🏁 Getting Started
+Prerequisites
+Node.js ≥14
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+npm ≥6
 
-### `npm run eject`
+Installation
+Clone the repo
+git clone https://github.com/denchikchor/music-app.git
+cd music-app
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Install dependencies
+npm install
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+ini
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+VITE_API_BASE=https://your.api.endpoint
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Start development server
+npm start
+Visit http://localhost:3000
 
-## Learn More
+Build & Deployment
+Build for production
+npm run build
+Output is in dist/.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Preview production build
+npm run preview
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+🧩 Available Scripts
+npm start — start Vite dev server
+
+npm run build — bundle for production
+
+npm run preview — locally preview production build
+
+npm run test — run all tests in watch mode
+
+npm run format — run Prettier on all source files
+
+📂 Project Structure
+
+music-app/
+├── public/ # Static assets & index.html
+├── src/
+│ ├── api/ # HTTP clients & endpoints (axios)
+│ ├── assets/ # Images, SVGs, icons
+│ ├── components/ # Reusable UI components
+│ │ ├── Header/ # App header & search
+│ │ ├── TrackList/ # TrackList + subcomponents
+│ │ ├── TrackItem/ # TrackItemView, Cover, Info, Player, Actions
+│ │ ├── CustomAudioPlayer/ # Audio player + Canvas visualization
+│ │ ├── TrackUpload/ # File upload component
+│ │ ├── TrackForm/ # Create/Edit form + validation
+│ │ ├── UI/ # Buttons, Dialogs, ToastMessage, etc.
+│ │ └── … # other shared components
+│ ├── features/ # Redux slices & async thunks
+│ │ ├── tracks/ # trackSlice, types
+│ │ └── genres/ # genresSlice, types
+│ ├── hooks/ # Custom hooks (useDebounce, useTracks, useTrackFiltering, pagination...)
+│ ├── constants/ # Shared constants (e.g. PAGE_SIZE)
+│ ├── store.ts # Redux store configuration
+│ ├── App.tsx # Root component
+│ ├── main.tsx # Entry point
+│ └── vite-env.d.ts # Vite + SVG + CSS module typings
+├── tests/ # Test utilities (test-utils.tsx)
+├── .env # Environment variables
+├── vite.config.ts # Vite configuration
+├── tsconfig.json # TypeScript config
+├── package.json # NPM scripts & dependencies
+└── README.md # You are here
+🧪 Testing
+This project uses Vitest + React Testing Library:
+
+Components are tested in isolation with mocked dependencies (e.g. CustomAudioPlayer, TrackUpload).
+
+Data-testids ensure selectors for DOM queries.
+
+To run tests:
+
+npm test
+Write tests next to components (ComponentName.test.tsx) or in a centralized tests/ folder for utilities.
+
+🤝 Contributing
+Fork & clone
+
+Create feature branch: git checkout -b feature/my-feature
+
+Install & develop
+
+Run tests & ensure all pass
+
+Thank you for using Music App! Enjoy managing and playing your tracks with ease.

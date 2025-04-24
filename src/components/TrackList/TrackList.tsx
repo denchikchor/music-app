@@ -110,6 +110,7 @@ const TrackList: React.FC<Props> = ({
         setSelectedGenre={setSelectedGenre}
         artists={uniqueArtists}
         genres={uniqueGenres}
+        setCurrentPage={setCurrentPage}
       />
 
       <TrackBulkActions

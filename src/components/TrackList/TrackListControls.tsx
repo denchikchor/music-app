@@ -14,6 +14,7 @@ interface Props {
   setSelectedGenre: React.Dispatch<React.SetStateAction<string>>;
   artists: string[];
   genres: string[];
+  setCurrentPage: (page: number) => void;
 }
 
 const TrackListControls: React.FC<Props> = ({
@@ -27,6 +28,7 @@ const TrackListControls: React.FC<Props> = ({
   setSelectedGenre,
   artists,
   genres,
+  setCurrentPage,
 }) => {
   return (
     <div className={styles.controls}>
@@ -43,6 +45,7 @@ const TrackListControls: React.FC<Props> = ({
         selectedGenre={selectedGenre}
         onArtistChange={setSelectedArtist}
         onGenreChange={setSelectedGenre}
+        setCurrentPage={setCurrentPage}
       />
     </div>
   );

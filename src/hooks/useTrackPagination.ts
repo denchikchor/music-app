@@ -42,7 +42,7 @@ export const useTrackPagination = (filteredSortedTracks: Track[]): UseTrackPagin
 
       if (!isOnSamePage) {
         setCurrentPage(nextPage + 1);
-        setCurrentPlayingIndex(null); // очищаємо індекс перед ререндером
+        setCurrentPlayingIndex(null); 
 
         setTimeout(() => {
           setCurrentPlayingIndex(nextPlayableIndex);

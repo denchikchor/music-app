@@ -36,7 +36,7 @@ describe('TrackItem', () => {
 
   it('renders track player when audioFile is provided', () => {
     render(<TrackItem {...baseProps} />);
-    expect(screen.getByRole('button')).toBeInTheDocument(); // Play button from TrackPlayer
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
   it('calls onEdit with correct track when edit button is clicked', () => {

@@ -1,4 +1,3 @@
-// src/hooks/__tests__/useTrackFiltering.test.tsx
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { useTrackFiltering } from '../useTrackFiltering';
@@ -43,7 +42,6 @@ const tracks: Track[] = [
   },
 ];
 
-// Test component that renders the IDs of filtered tracks
 type TestComponentProps = {
   search: string;
   selectedArtist: string;

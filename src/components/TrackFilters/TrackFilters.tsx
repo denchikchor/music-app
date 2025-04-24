@@ -8,6 +8,7 @@ interface Props {
   selectedGenre: string;
   onArtistChange: (value: string) => void;
   onGenreChange: (value: string) => void;
+  setCurrentPage: (page: number) => void;
 }
 
 const TrackFilters: React.FC<Props> = ({
@@ -17,13 +18,17 @@ const TrackFilters: React.FC<Props> = ({
   selectedGenre,
   onArtistChange,
   onGenreChange,
+  setCurrentPage,
 }) => {
   return (
     <div className={styles.filtersWrapper}>
       <div className={styles.customSelectWrapper}>
         <select
           value={selectedArtist}
-          onChange={(e) => onArtistChange(e.target.value)}
+          onChange={(e) => {
+            onArtistChange(e.target.value);
+            setCurrentPage(1);
+          }}
           className={styles.select}
           data-testid="filter-artist"
         >
@@ -41,7 +46,10 @@ const TrackFilters: React.FC<Props> = ({
       <div className={styles.customSelectWrapper}>
         <select
           value={selectedGenre}
-          onChange={(e) => onGenreChange(e.target.value)}
+          onChange={(e) => {
+            onGenreChange(e.target.value);
+            setCurrentPage(1);
+          }}
           className={styles.select}
           data-testid="filter-genre"
         >

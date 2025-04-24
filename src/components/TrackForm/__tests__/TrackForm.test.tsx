@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { act } from 'react';
 import TrackForm from '../TrackForm';
 
-// Мок GenreSelector
 vi.mock('../../GenreSelector/GenreSelector', () => ({
   __esModule: true,
   default: ({ selected }: { selected: string[] }) => (

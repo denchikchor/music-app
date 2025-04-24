@@ -29,7 +29,9 @@ const SearchInput: React.FC<Props> = ({ value, onChange }) => {
         type="text"
         placeholder="Search by title, artist, or album"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value);
+        }}
         className={styles.input}
         data-testid="search-input"
       />

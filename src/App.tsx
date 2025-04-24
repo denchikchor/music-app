@@ -25,7 +25,10 @@ function App() {
       <Header
         onCreate={() => setModalOpen(true)}
         searchValue={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={(value) => {
+          setSearchQuery(value);
+          setForceGoToFirstPage(true);
+        }}
       />
       <main className="content">
         <TrackList
