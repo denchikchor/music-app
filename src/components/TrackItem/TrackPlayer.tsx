@@ -19,7 +19,7 @@ const TrackPlayer: React.FC<Props> = ({
   isActive,
   onTogglePlay,
   onTrackEnd,
-  updatedAt
+  updatedAt,
 }) => (
   <div className={styles.player}>
     {audioFile && (

@@ -12,4 +12,8 @@ vi.mock('./components/TrackUpload/TrackUpload', () => ({
   ),
 }));
 
+vi.mock('./assets/dots.svg?react', () => ({
+  default: () => <div data-testid="mock-dots-icon" />,
+}));
+
 (globalThis as any).jest = vi;

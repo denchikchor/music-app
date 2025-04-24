@@ -8,9 +8,6 @@ jest.mock('../../TrackUpload/TrackUpload', () => ({ trackId }: { trackId: string
 import { render, screen } from '../../../test-utils';
 import TrackPlayer from '../TrackPlayer';
 
-
-
-
 describe('TrackPlayer', () => {
   const baseProps = {
     trackId: '1',
@@ -37,4 +34,3 @@ describe('TrackPlayer', () => {
     expect(screen.getByTestId('mock-upload')).toHaveTextContent('Upload for 1');
   });
 });
- 

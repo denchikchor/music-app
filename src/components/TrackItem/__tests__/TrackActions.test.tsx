@@ -5,7 +5,6 @@ import React from 'react';
 
 export const customRender = (ui: React.ReactElement) => render(<>{ui}</>);
 
-
 describe('TrackActions', () => {
   const baseProps = {
     trackId: 'track-1',
