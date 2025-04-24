@@ -46,12 +46,9 @@ cd music-app
 Install dependencies
 npm install
 
-ini
-
-VITE_API_BASE=https://your.api.endpoint
-
 Start development server
 npm start
+
 Visit http://localhost:3000
 
 Build & Deployment
@@ -73,37 +70,6 @@ npm run test — run all tests in watch mode
 
 npm run format — run Prettier on all source files
 
-📂 Project Structure
-
-music-app/
-├── public/ # Static assets & index.html
-├── src/
-│ ├── api/ # HTTP clients & endpoints (axios)
-│ ├── assets/ # Images, SVGs, icons
-│ ├── components/ # Reusable UI components
-│ │ ├── Header/ # App header & search
-│ │ ├── TrackList/ # TrackList + subcomponents
-│ │ ├── TrackItem/ # TrackItemView, Cover, Info, Player, Actions
-│ │ ├── CustomAudioPlayer/ # Audio player + Canvas visualization
-│ │ ├── TrackUpload/ # File upload component
-│ │ ├── TrackForm/ # Create/Edit form + validation
-│ │ ├── UI/ # Buttons, Dialogs, ToastMessage, etc.
-│ │ └── … # other shared components
-│ ├── features/ # Redux slices & async thunks
-│ │ ├── tracks/ # trackSlice, types
-│ │ └── genres/ # genresSlice, types
-│ ├── hooks/ # Custom hooks (useDebounce, useTracks, useTrackFiltering, pagination...)
-│ ├── constants/ # Shared constants (e.g. PAGE_SIZE)
-│ ├── store.ts # Redux store configuration
-│ ├── App.tsx # Root component
-│ ├── main.tsx # Entry point
-│ └── vite-env.d.ts # Vite + SVG + CSS module typings
-├── tests/ # Test utilities (test-utils.tsx)
-├── .env # Environment variables
-├── vite.config.ts # Vite configuration
-├── tsconfig.json # TypeScript config
-├── package.json # NPM scripts & dependencies
-└── README.md # You are here
 🧪 Testing
 This project uses Vitest + React Testing Library:
 
