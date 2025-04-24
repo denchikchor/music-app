@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './CustomAudioPlayer.module.css';
-import { ReactComponent as PlayIcon } from '../../assets/play.svg';
-import { ReactComponent as PauseIcon } from '../../assets/pause.svg';
+import PlayIcon from '../../assets/play.svg?react';
+import PauseIcon from '../../assets/pause.svg?react';
 
 interface Props {
   src: string;

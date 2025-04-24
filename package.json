@@ -6,8 +6,6 @@
     "@radix-ui/react-dialog": "^1.1.10",
     "@reduxjs/toolkit": "^2.7.0",
     "@testing-library/dom": "^10.4.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.126",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "axios": "^1.8.4",
@@ -17,16 +15,15 @@
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.5.1",
-    "react-scripts": "5.0.1",
     "react-toastify": "^11.0.5",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,scss}\""
   },
   "eslintConfig": {
@@ -48,10 +45,28 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.27.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
-    "jest": "^27.5.1",
-    "prettier": "^3.5.3"
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.17.30",
+    "@types/testing-library__jest-dom": "^5.14.9",
+    "@types/trusted-types": "^2.0.7",
+    "@vitejs/plugin-react": "^4.4.1",
+    "babel-jest": "^29.7.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.5.3",
+    "vite": "^6.3.3",
+    "vite-plugin-svgr": "^4.3.0",
+    "vitest": "^3.1.2"
+  },
+  "resolutions": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   }
 }

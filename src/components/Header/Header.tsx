@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './Header.module.css';
 import Button from '../UI/Button/Button';
 import SearchInput from '../SearchInput/SearchInput';
-import { ReactComponent as Logo } from '../../assets/logo.svg';
+import Logo from '../../assets/logo.svg?react';
 
 interface Props {
   onCreate: () => void;

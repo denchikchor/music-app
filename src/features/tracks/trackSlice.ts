@@ -144,7 +144,7 @@ const tracksSlice = createSlice({
       .addCase(removeTrackFile.fulfilled, (state, action) => {
         const idx = state.items.findIndex((t) => t.id === action.payload);
         if (idx !== -1) state.items[idx].audioFile = '';
-      });
+      }); 
   },
 });
 

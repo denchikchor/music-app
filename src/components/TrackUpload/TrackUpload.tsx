@@ -42,6 +42,8 @@ const TrackUpload: React.FC<Props> = ({ trackId }) => {
 
     const formData = new FormData();
     formData.append('file', file);
+    console.log('Selected file:', e.target.files?.[0]);
+    console.log('Uploading file:', formData.get('file'));
 
     setUploading(true);
     try {

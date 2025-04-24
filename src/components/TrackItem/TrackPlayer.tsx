@@ -7,6 +7,7 @@ import { API_BASE } from '../../api/config';
 interface Props {
   trackId: string;
   audioFile?: string;
+  updatedAt: string;
   isActive: boolean;
   onTogglePlay: () => void;
   onTrackEnd: () => void;
@@ -18,12 +19,13 @@ const TrackPlayer: React.FC<Props> = ({
   isActive,
   onTogglePlay,
   onTrackEnd,
+  updatedAt
 }) => (
   <div className={styles.player}>
     {audioFile && (
       <div className={styles.audioWrapper}>
         <CustomAudioPlayer
-          src={`${API_BASE}/files/${audioFile}`}
+          src={`${API_BASE}/files/${audioFile}?v=${updatedAt}`}
           isActive={isActive}
           onTogglePlay={onTogglePlay}
           onEndedNext={onTrackEnd}

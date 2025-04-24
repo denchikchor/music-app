@@ -17,7 +17,7 @@ interface Props {
   onToggleSelect?: () => void;
 }
 
-const TrackItemView: React.FC<Props> = ({
+const TrackItem: React.FC<Props> = ({
   track,
   isActive,
   onEdit,
@@ -45,6 +45,7 @@ const TrackItemView: React.FC<Props> = ({
         isActive={isActive}
         onTogglePlay={onTogglePlay}
         onTrackEnd={onTrackEnd}
+        updatedAt={track.updatedAt}
       />
       <TrackActions
         onEdit={() => onEdit(track)}
@@ -57,4 +58,4 @@ const TrackItemView: React.FC<Props> = ({
   );
 };
 
-export default TrackItemView;
+export default TrackItem;

@@ -1,7 +1,3 @@
-// TrackPlayer.test.tsx
-import { render, screen } from '@testing-library/react';
-import TrackPlayer from '../TrackPlayer';
-
 jest.mock('../../CustomAudioPlayer/CustomAudioPlayer', () => () => (
   <div data-testid="mock-audio-player">AudioPlayer</div>
 ));
@@ -9,10 +5,18 @@ jest.mock('../../TrackUpload/TrackUpload', () => ({ trackId }: { trackId: string
   <div data-testid="mock-upload">Upload for {trackId}</div>
 ));
 
+import { render, screen } from '../../../test-utils';
+import TrackPlayer from '../TrackPlayer';
+
+
+
+
 describe('TrackPlayer', () => {
   const baseProps = {
     trackId: '1',
     isActive: false,
+    audioFile: '',
+    updatedAt: new Date().toISOString(),
     onTogglePlay: jest.fn(),
     onTrackEnd: jest.fn(),
     onPlayStart: jest.fn(),
@@ -33,3 +37,4 @@ describe('TrackPlayer', () => {
     expect(screen.getByTestId('mock-upload')).toHaveTextContent('Upload for 1');
   });
 });
+ 

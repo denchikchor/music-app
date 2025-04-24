@@ -1,8 +1,14 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils';
 import TrackActions from '../TrackActions';
+
+import React from 'react';
+
+export const customRender = (ui: React.ReactElement) => render(<>{ui}</>);
+
 
 describe('TrackActions', () => {
   const baseProps = {
+    trackId: 'track-1',
     onEdit: jest.fn(),
     showCheckbox: true,
     checked: false,
@@ -21,7 +27,7 @@ describe('TrackActions', () => {
 
   it('calls onEdit when edit button is clicked', () => {
     render(<TrackActions {...baseProps} />);
-    const button = screen.getByTestId('edit-button');
+    const button = screen.getByTestId(`edit-track-${baseProps.trackId}`);
     fireEvent.click(button);
     expect(baseProps.onEdit).toHaveBeenCalled();
   });
